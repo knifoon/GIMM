@@ -59,6 +59,18 @@ let swapMods = (p) => {
     </li>
     </div>
     <div v-else class="readme">
+      <div class="info">
+        <h3>Welcome!</h3>
+        <p>
+          This is still under development, so beware
+          
+          The goal of this project is to easily manage character skins in <a href="https://github.com/SilentNightSound/GI-Model-Importer">[GIMI]</a>
+          choose a folder that has all your character skins, and the mod folder inside GIMI
+        </p>
+        <br>
+        <span class="highlight">Please make sure all the mods you currently have inside GIMI are also in your mod folder, this tool will delete folders from the gimi mod folder when setting new mods to active</span>
+      </div>
+
       <div v-if="settings.get('gimiFolder')"> Current GIMI folder: {{ settings.get('gimiFolder') }}</div>
       <div v-else>
         No GIMI folder set, please select the mods folder in your GIMI directory
@@ -111,5 +123,14 @@ h3 {
   color: var(--vt-c-white-mute);
   padding: 5px;
   float: right;
+}
+.info {
+  margin-bottom: 2rem;
+}
+.info .highlight {
+  display: inline-block;
+  padding: 20px;
+  font-weight: bold;
+  background: #fdf196;
 }
 </style>
