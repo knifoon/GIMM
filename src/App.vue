@@ -2,35 +2,70 @@
 import {ref} from 'vue'
 import Content from './components/Content.vue'
 import { getMods } from "@/assets/getMods.js"
+import { getGimi } from "@/assets/getGimi.js"
 
 const {ipcRenderer} = require('electron')
+const Store = require('electron-store');
+
+const settings = new Store();
+
 
 let showList = ref(false)
 let modList = {}
+let currentContent = ref(null)
+let currentCharacter = ref(null)
+
+let listRender = (f) =>{let unsorted = getMods(f)
+  modList = Object.keys(unsorted).sort().reduce((m,name) => ({ ...m, [name]: unsorted[name]}), {});
+  showList.value = true}
+let activeMods = ref(null)
+let updateGimi = () => {
+  activeMods.value = getGimi(settings.get('gimiFolder'))
+  console.log(activeMods);
+}
+if(settings.get('modFolder')) listRender(settings.get('modFolder'))
+if(settings.get('gimiFolder')) updateGimi()
 
 ipcRenderer.on('modFolder',(e,f) =>{
-  // modsList.value = getMods(f)
-  modList = getMods(f)
-  showList.value = true
-  console.log(modList)
+  settings.set('modFolder', f)
+  listRender(f)
 })
+ipcRenderer.on('gimiFolder',(e,f) =>{
+  settings.set('gimiFolder', f)
+  activeMods.value = getGimi(f)
+})
+
+const changeContent = (con,char) => {
+  currentContent.value = con
+  currentCharacter.value = char
+}
+
+const resetFolders = () => {
+  settings.delete('gimiFolder')
+  settings.delete('modFolder')
+  showList.value = false;
+  currentContent.value = null;
+}
 </script>
 
 <template>
 <div class="content-head"><h2>Information</h2></div>
 <div class="list-head"><h2>Characters</h2></div>
-<Content></Content>
+<Content :mods="currentContent" :characterName="currentCharacter" :activeMods="activeMods" v-on:updateGimi="updateGimi"></Content>
 <div class="character-list">
   <div v-if="showList">
-    <li v-for="(mods, charName) in modList">
+    <li v-for="(mods, charName) in modList" @click="changeContent(mods,charName)"
+    :class="{active: charName == currentCharacter}">
       {{ charName }} ({{ mods.length }})
     </li>
   </div>
   <div v-else>
-    <h3>Add Mod Folder</h3>
+    <button @click="ipcRenderer.send('selectModFolder')">Add Mod Folder</button>
   </div>
 </div>
-<footer>work in progress</footer>
+<footer>
+  <button @click="resetFolders">Reset Folders</button>
+  work in progress</footer>
 </template>
 
 <style scoped>
@@ -56,5 +91,15 @@ ipcRenderer.on('modFolder',(e,f) =>{
 .character-list {
   grid-area: sidebar;
   padding-left: 1rem;
+}
+.character-list li {
+  cursor: pointer;
+}
+.character-list li:hover {
+  color: #fff;
+}
+.character-list .active {
+  color: #fff;
+  font-weight: bold;
 }
 </style>

@@ -2,6 +2,8 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, ipcMain, dialog } = require('electron')
 const path = require('path')
+const Store = require('electron-store')
+Store.initRenderer()
 
 const createWindow = () => {
   // Create the browser window.
@@ -57,6 +59,22 @@ ipcMain.on('selectModFolder',(e) => {
     const filepath = file.filePaths[0].toString();
     console.log(filepath);
     e.reply('modFolder',filepath)
+  ``}  
+``}).catch(err => {
+    console.log(err)
+  })
+})
+
+ipcMain.on('selectGimiFolder',(e) => {
+  dialog.showOpenDialog({
+    title: "Select Gimi Mod Folder",
+    properties:['openFile', 'openDirectory']
+  }).then(file => {
+    console.log(file.canceled);
+    if (!file.canceled) {
+    const filepath = file.filePaths[0].toString();
+    console.log(filepath);
+    e.reply('gimiFolder',filepath)
   ``}  
 ``}).catch(err => {
     console.log(err)

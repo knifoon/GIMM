@@ -10,6 +10,7 @@
     "e:start": "electron ."
   },
   "dependencies": {
+    "electron-store": "^8.1.0",
     "marked": "^4.2.12",
     "pinia": "^2.0.32",
     "vue": "^3.2.47"
