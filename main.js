@@ -1,6 +1,6 @@
 // main.js
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, ipcMain, dialog } = require('electron')
+const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron')
 const path = require('path')
 const Store = require('electron-store')
 Store.initRenderer()
@@ -18,10 +18,10 @@ const createWindow = () => {
       preload: path.join(__dirname, 'preload.js')
     }
   })
-
   // and load the index.html of the app.
   mainWindow.loadFile('dist/index.html')
 
+  
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
 }

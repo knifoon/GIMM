@@ -46,12 +46,11 @@ let swapMods = (p) => {
     <div v-if="props.mods" class="readme">
       <h1>{{ props.characterName }}</h1>
     <li class="mod-li" v-for="item in props.mods">
-      <div>
-        {{ item.name }} <button v-if="item.readme" @click="rmToggle(item.name)">🔍</button>
-        
-        
+      <div class="mod-info">
+        <span class="mod-name"><h2>{{ item.name }}</h2></span>
+        <button v-if="item.readme" @click="rmToggle(item.name)" class="rm-toggle">🔍</button>
         <button class="toggle" v-if="!compareMods(item.path)" @click="swapMods(item.path)">Enable</button>
-        <span v-else>Active</span>
+        <span v-else class="active-mod">Active</span>
       </div>
     <div v-if="activeRM == item.name" v-html="renderRM(item.readme)"></div>
     </li>
@@ -80,28 +79,6 @@ let swapMods = (p) => {
 </template>
 
 <style scoped>
-h1 {
-  font-weight: 500;
-  font-size: 2.6rem;
-  top: -10px;
-}
-
-h3 {
-  font-size: 1.2rem;
-}
-
-.greetings h1,
-.greetings h3 {
-  text-align: center;
-}
-
-@media (min-width: 1024px) {
-  .greetings h1,
-  .greetings h3 {
-    text-align: left;
-  }
-}
-
 .mod-li div:first-child{
   border: solid 1px #ddd;
   padding: 0.5rem ;
@@ -111,16 +88,30 @@ h3 {
   border-top: none;
   padding: 0.5rem ;
 }
+.active-mod , .toggle {
+  height: 34px;
+  width: 60px;
+  text-align: center;
+}
 .toggle {
-  float: right;
   background: rgb(81, 125, 108);
   padding: 5px;
 }
-.mod-li span {
+.rm-toggle {
+  margin: 0 10px;
+  height: 34px;
+}
+.mod-li .active-mod {
   background: #5a6f98;
   color: var(--vt-c-white-mute);
   padding: 5px;
-  float: right;
+}
+.mod-info {
+  display: flex;
+  align-items: flex-start;
+}
+.mod-name {
+  flex-grow: 1;
 }
 .info {
   margin-bottom: 2rem;

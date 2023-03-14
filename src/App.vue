@@ -36,8 +36,10 @@ ipcRenderer.on('gimiFolder',(e,f) =>{
 })
 
 const changeContent = (con,char) => {
-  currentContent.value = con
-  currentCharacter.value = char
+  if(settings.get('gimiFolder')){
+    currentContent.value = con
+    currentCharacter.value = char
+  }
 }
 
 const resetFolders = () => {

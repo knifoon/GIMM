@@ -10,7 +10,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "e:start": "electron .",
-    "e:build": "electron-builder"
+    "e:build": "electron-builder -w --x64"
   },
   "dependencies": {
     "electron-store": "^8.1.0",
