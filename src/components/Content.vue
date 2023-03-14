@@ -43,19 +43,19 @@ let swapMods = (p) => {
 
 <template>
   <div class="content">
-    <div v-if="props.mods" class="readme">
+    <div v-if="props.mods">
       <h1>{{ props.characterName }}</h1>
     <li class="mod-li" v-for="item in props.mods">
       <div class="mod-info">
-        <span class="mod-name"><h2>{{ item.name }}</h2></span>
-        <button v-if="item.readme" @click="rmToggle(item.name)" class="rm-toggle">🔍</button>
+        <span class="mod-name">{{ item.name }}</span>
+        <button v-if="item.readme" @click="rmToggle(item.name)" class="rm-toggle"><img src="/images/info.svg" title="readme"></button>
         <button class="toggle" v-if="!compareMods(item.path)" @click="swapMods(item.path)">Enable</button>
         <span v-else class="active-mod">Active</span>
       </div>
-    <div v-if="activeRM == item.name" v-html="renderRM(item.readme)"></div>
+    <div class="readme" v-if="activeRM == item.name" v-html="renderRM(item.readme)"></div>
     </li>
     </div>
-    <div v-else class="readme">
+    <div v-else>
       <div class="info">
         <h3>Welcome!</h3>
         <p>
@@ -79,32 +79,43 @@ let swapMods = (p) => {
 </template>
 
 <style scoped>
+.mod-li:last-child div:first-child{
+border-bottom: solid 1px #ddd;
+}
 .mod-li div:first-child{
   border: solid 1px #ddd;
+  border-bottom: none;
   padding: 0.5rem ;
 }
 .mod-li div:nth-child(2){
   border: solid 1px #ddd;
-  border-top: none;
   padding: 0.5rem ;
+  margin-bottom: 0.5rem;
 }
 .active-mod , .toggle {
+  cursor: pointer;
+  border: none;
+  border-radius: 3px;
   height: 34px;
   width: 60px;
   text-align: center;
-}
-.toggle {
-  background: rgb(81, 125, 108);
-  padding: 5px;
-}
-.rm-toggle {
-  margin: 0 10px;
-  height: 34px;
-}
-.mod-li .active-mod {
-  background: #5a6f98;
   color: var(--vt-c-white-mute);
   padding: 5px;
+}
+.active-mod:hover , .toggle:hover {
+  font-weight: bold;
+}
+.toggle {
+  background: rgb(130, 165, 219);
+}
+.rm-toggle {
+  cursor: pointer;
+  margin: 0 10px;
+  height: 34px;
+  border: none;
+}
+.active-mod {
+  background: #5adc97;
 }
 .mod-info {
   display: flex;
@@ -112,6 +123,10 @@ let swapMods = (p) => {
 }
 .mod-name {
   flex-grow: 1;
+  font-size: 1.2rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .info {
   margin-bottom: 2rem;
@@ -121,5 +136,50 @@ let swapMods = (p) => {
   padding: 20px;
   font-weight: bold;
   background: #fdf196;
+}
+</style>
+
+<!-- Read Me Style -->
+<style>
+.readme h1{
+font-size: 18px;
+font-weight: bold;
+display: block;
+}
+.readme strong {
+  font-weight: bold;
+}
+.readme p {
+  margin: 10px 0;
+}
+.readme blockquote {
+  background: #ddd;
+  border-radius: 3px;
+  padding: 10px;
+  margin: 10px;
+}
+.readme code {
+  background: var(--vt-c-black-soft);
+  color: #fff;
+  border-radius: 3px;
+  padding: 10px;
+  margin: 10px;
+}
+.readme pre code {
+  display: block;
+  overflow: hidden;
+  white-space: pre-wrap;
+  background: var(--vt-c-black-soft);
+  color: #fff;
+  border-radius: 3px;
+  padding: 10px;
+  margin: 10px;
+}
+
+.readme hr {
+  margin: 15px 0;
+}
+.readme ol li {
+  list-style: decimal;
 }
 </style>
