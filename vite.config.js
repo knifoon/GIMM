@@ -6,7 +6,7 @@ import path from 'node:path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: path.resolve(__dirname,'./dist'),
+  base: path.posix.resolve('./dist'),
   electronBuilder: {
     preload: 'preload.js'
 },

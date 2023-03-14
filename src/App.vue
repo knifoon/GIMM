@@ -87,10 +87,12 @@ const resetFolders = () => {
   grid-area: content;
   background: var(--vt-c-white-mute);
   color: var(--vt-c-black-soft);
+  overflow-y: scroll;
 }
 .character-list {
   grid-area: sidebar;
   padding-left: 1rem;
+  overflow-y: scroll;
 }
 .character-list li {
   cursor: pointer;
