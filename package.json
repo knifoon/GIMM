@@ -1,6 +1,6 @@
 {
   "name": "gimiman",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "main": "main.js",
   "author": "knifoon",
@@ -10,7 +10,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "e:start": "electron .",
-    "e:build": "electron-builder -w --x64"
+    "make": "electron-builder -w --x64"
   },
   "dependencies": {
     "electron-store": "^8.1.0",
