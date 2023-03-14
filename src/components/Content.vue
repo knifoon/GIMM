@@ -30,6 +30,10 @@ let compareMods = (p) => {
     if(cur == active) return true
   } else return false
 }
+let rmMod = () => {
+  rmSync(props.activeMods[props.characterName][0].path,{recursive: true})
+  emit('updateGimi')
+}
 let swapMods = (p) => {
   let comp = p.split('/')
   let cur =  comp[comp.length -1]
@@ -44,7 +48,10 @@ let swapMods = (p) => {
 <template>
   <div class="content">
     <div v-if="props.mods">
-      <h1>{{ props.characterName }}</h1>
+      <header>
+        <div>{{ props.characterName }}</div>
+        <button class="disable" v-if="props.activeMods[props.characterName]" @click="rmMod">Disable</button>
+      </header>
     <li class="mod-li" v-for="item in props.mods">
       <div class="mod-info">
         <span class="mod-name">{{ item.name }}</span>
@@ -79,6 +86,16 @@ let swapMods = (p) => {
 </template>
 
 <style scoped>
+header {
+  display: flex;
+  align-items: flex-start;
+  padding: 10px;
+}
+header div {
+  flex-grow: 1;
+  font-size: 24px;
+  font-weight: bold;
+}
 .mod-li:last-child div:first-child{
 border-bottom: solid 1px #ddd;
 }
@@ -92,21 +109,24 @@ border-bottom: solid 1px #ddd;
   padding: 0.5rem ;
   margin-bottom: 0.5rem;
 }
-.active-mod , .toggle {
+.active-mod , .toggle , .disable{
   cursor: pointer;
   border: none;
   border-radius: 3px;
   height: 34px;
-  width: 60px;
+  min-width: 60px;
   text-align: center;
   color: var(--vt-c-white-mute);
   padding: 5px;
 }
-.active-mod:hover , .toggle:hover {
+.active-mod:hover , .toggle:hover, .disable:hover {
   font-weight: bold;
 }
 .toggle {
   background: rgb(130, 165, 219);
+}
+.disable{
+  background: #c95d63;
 }
 .rm-toggle {
   cursor: pointer;
