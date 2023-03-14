@@ -13,8 +13,6 @@ const Store = require('electron-store');
 
 const settings = new Store();
 
-
-let test = marked.parse(readFileSync('./public/rmex.md','utf-8'));
 const renderRM = (file) => marked.parse(readFileSync(file,'utf-8'));
 
 let activeRM = ref('none');
