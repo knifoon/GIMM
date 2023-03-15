@@ -50,7 +50,7 @@ const getMods = (f) => {
       }
     });
     // "characters to ignore
-    let charIgnore = ['undefined','CharacterShaders','bomb','chibi']
+    let charIgnore = ['CharacterShaders','bomb','chibi']
     const removeFromList = () =>{
       Object.keys(characterMods).forEach(n=>{
         if(charIgnore.indexOf(n) >= 0 || n.startsWith('DISABLED')) delete characterMods[n]
