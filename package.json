@@ -1,10 +1,10 @@
 {
-  "name": "gimiman",
+  "name": "gimm",
   "version": "0.0.3",
   "private": true,
   "main": "main.js",
   "author": "knifoon",
-  "description": "gimi manager",
+  "description": "Genshin Impact Mod Manager",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

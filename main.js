@@ -1,6 +1,6 @@
 // main.js
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron')
+const { app, BrowserWindow, ipcMain, dialog, shell,Menu , MenuItem } = require('electron')
 const path = require('path')
 const Store = require('electron-store')
 Store.initRenderer()
@@ -21,7 +21,30 @@ const createWindow = () => {
   // and load the index.html of the app.
   mainWindow.loadFile('dist/index.html')
 
-  
+  // Menu Setup
+const template = [
+  {
+  label: app.name,
+      submenu: [
+         {label:'Settings'},
+         {role: 'quit'}
+      ]
+  },
+  {
+    label: "Help",
+      submenu: [
+        { label: 'GameBanana',
+          click: async () => {
+          const { shell } = require('electron')
+          await shell.openExternal('https://gamebanana.com/tools/12471')}
+        }
+      ]
+    }
+]
+
+  const menu = Menu.buildFromTemplate(template)
+  Menu.setApplicationMenu(menu)
+
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
 }
