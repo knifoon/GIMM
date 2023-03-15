@@ -42,8 +42,8 @@ const template = [
     }
 ]
 
-  const menu = Menu.buildFromTemplate(template)
-  Menu.setApplicationMenu(menu)
+  // const menu = Menu.buildFromTemplate(template)
+  // Menu.setApplicationMenu(menu)
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()

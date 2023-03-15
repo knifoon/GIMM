@@ -76,10 +76,10 @@ let swapMods = (p) => {
       </div>
 
       <div v-if="settings.get('gimiFolder')"> Current GIMI folder: {{ settings.get('gimiFolder') }}</div>
-      <div v-else>
+      <!-- <div v-else>
         No GIMI folder set, please select the mods folder in your GIMI directory
         <button @click="ipcRenderer.send('selectGimiFolder')">Add GIMI mod Folder</button>
-      </div>
+      </div> -->
       
     </div>
   </div>

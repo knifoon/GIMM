@@ -29,10 +29,12 @@ if(settings.get('gimiFolder')) updateGimi()
 ipcRenderer.on('modFolder',(e,f) =>{
   settings.set('modFolder', f)
   listRender(f)
+  if(settings.get('gimiFolder')) showSetup.value = false
 })
 ipcRenderer.on('gimiFolder',(e,f) =>{
   settings.set('gimiFolder', f)
   activeMods.value = getGimi(f)
+  if(settings.get('modFolder')) showSetup.value = false
 })
 
 const changeContent = (con,char) => {
@@ -46,31 +48,89 @@ const resetFolders = () => {
   settings.delete('gimiFolder')
   settings.delete('modFolder')
   showList.value = false;
+  showSetup.value = true;
   currentContent.value = null;
 }
-</script>
 
+let showSetup = ref(true)
+if(settings.get('gimiFolder') && settings.get('modFolder')) showSetup.value=false
+</script>
 <template>
-<div class="content-head"><h2>Information</h2></div>
-<div class="list-head"><h2>Characters</h2></div>
-<Content :mods="currentContent" :characterName="currentCharacter" :activeMods="activeMods" v-on:updateGimi="updateGimi"></Content>
-<div class="character-list">
+<div class="content-head" v-show="!showSetup"><h2>Information</h2></div>
+<div class="list-head" v-show="!showSetup"><h2>Characters</h2></div>
+
+<div v-if="showSetup" class="setup">
+  <img class= "welk" src="/images/gimmbg.png" alt="" >
+  <div class="setup-content">
+    no folders selected!
+    No GIMI folder set, please select the mods folder in your GIMI directory
+  </div>
+  <button @click="ipcRenderer.send('selectModFolder')" class="mod-button">Add Mod Folder</button>
+  <button @click="ipcRenderer.send('selectGimiFolder')" class="gimi-button">Add GIMI mod Folder</button>
+  </div>
+<Content v-if="!showSetup" :mods="currentContent" :characterName="currentCharacter" :activeMods="activeMods" v-on:updateGimi="updateGimi"></Content>
+<div v-if="!showSetup" class="character-list">
   <div v-if="showList">
     <li v-for="(mods, charName) in modList" @click="changeContent(mods,charName)"
     :class="{active: charName == currentCharacter}">
       {{ charName }} ({{ mods.length }})
     </li>
   </div>
-  <div v-else>
+  <!-- <div v-else>
     <button @click="ipcRenderer.send('selectModFolder')">Add Mod Folder</button>
-  </div>
+  </div> -->
 </div>
-<footer>
+<footer v-show="!showSetup">
   <button @click="resetFolders">Reset Folders</button>
   work in progress</footer>
 </template>
 
 <style scoped>
+.setup {
+  width: 80%;
+  margin: auto;
+  display: grid;
+  padding: 1rem;
+  grid-column-start: content;
+  grid-row-start: content;
+  grid-column-end: sidebar;
+  grid-row-end: sidebar;
+  text-align: center;
+  grid-template-areas: 
+    "img img"
+    "content content"
+    "modbutton gimibutton";
+  
+}
+.welk {
+  grid-area: img;
+  width: 400px;
+  margin: auto;
+  display: block;
+}
+.setup button {
+  cursor: pointer;
+  background: #333035;
+  color: var(--vt-c-white-mute);
+  padding: 10px;
+  border: none;
+  border-radius: 3px;
+  width: 200px;
+  margin: auto;
+}
+.setup button:hover {
+  background: #413E44;
+}
+.setup-content {
+  grid-area: content;
+  padding: 2rem;
+}
+.mod-button {
+  grid-area: modbutton;
+}
+.gimi-button {
+  grid-area: gimibutton;
+}
 .content-head {
   grid-area: h1;
   padding: 1rem;
