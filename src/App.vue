@@ -62,8 +62,8 @@ if(settings.get('gimiFolder') && settings.get('modFolder')) showSetup.value=fals
 <div v-if="showSetup" class="setup">
   <img class= "welk" src="/images/gimmbg.png" alt="" >
   <div class="setup-content">
-    no folders selected!
-    No GIMI folder set, please select the mods folder in your GIMI directory
+    Please add your a folder with all your mods, unzipped.
+    And Add GIMI/3dmigoto's Mods folder.
   </div>
   <button @click="ipcRenderer.send('selectModFolder')" class="mod-button">Add Mod Folder</button>
   <button @click="ipcRenderer.send('selectGimiFolder')" class="gimi-button">Add GIMI mod Folder</button>
@@ -76,9 +76,6 @@ if(settings.get('gimiFolder') && settings.get('modFolder')) showSetup.value=fals
       {{ charName }} ({{ mods.length }})
     </li>
   </div>
-  <!-- <div v-else>
-    <button @click="ipcRenderer.send('selectModFolder')">Add Mod Folder</button>
-  </div> -->
 </div>
 <footer v-show="!showSetup">
   <button @click="resetFolders">Reset Folders</button>

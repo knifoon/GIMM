@@ -35,6 +35,19 @@ const getGimi = (f) => {
         })
       }
     });
+    // adjust list
+    let charIgnore = ['CharacterShaders','bomb','chibi']
+    const removeFromList = () =>{
+      Object.keys(characterMods).forEach(n=>{
+        if(n.toLowerCase().endsWith('mod')){
+          characterMods[n.substring(0,n.length-3)]= characterMods[n]
+          delete characterMods[n]
+        }
+        // if(charIgnore.indexOf(n) >= 0 || n.startsWith('DISABLED')) delete characterMods[n]
+      })
+    }
+    removeFromList()
+    console.log(characterMods)
     return characterMods
   }
 export {getGimi}

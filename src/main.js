@@ -12,7 +12,7 @@ app.mount('#app')
 const shell = require('electron').shell;
 
 document.addEventListener('click',e=>{
-    if(e.target == document.querySelector('a[href^="http"]')){
+    if(e.target.href+''.startsWith('http')){
         e.preventDefault();
         shell.openExternal(e.target.href);
     }

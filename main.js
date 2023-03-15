@@ -27,7 +27,8 @@ const template = [
   label: app.name,
       submenu: [
          {label:'Settings'},
-         {role: 'quit'}
+         {role: 'quit'},
+         {role: 'reload'}
       ]
   },
   {
@@ -42,8 +43,8 @@ const template = [
     }
 ]
 
-  // const menu = Menu.buildFromTemplate(template)
-  // Menu.setApplicationMenu(menu)
+  const menu = Menu.buildFromTemplate(template)
+  Menu.setApplicationMenu(menu)
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()

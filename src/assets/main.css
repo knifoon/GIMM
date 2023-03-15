@@ -21,4 +21,8 @@ li {
   grid-template-rows: 50px auto 50px;
 }
 
+p{
+  margin: 10px 0;
+}
+
 

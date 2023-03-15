@@ -30,6 +30,8 @@ let compareMods = (p) => {
     if(cur == active) return true
   } else return false
 }
+console.log('mods!!!')
+console.log(props.activeMods)
 let rmMod = () => {
   rmSync(props.activeMods[props.characterName][0].path,{recursive: true})
   emit('updateGimi')
@@ -67,20 +69,19 @@ let swapMods = (p) => {
         <h3>Welcome!</h3>
         <p>
           This is still under development, so beware
-          
+          <br>
           The goal of this project is to easily manage character skins in <a href="https://github.com/SilentNightSound/GI-Model-Importer">[GIMI]</a>
-          choose a folder that has all your character skins, and the mod folder inside GIMI
+          <br>
+          <br>
+          Both folders you've added should be different. If you've made a mistake, you can reset the folders by clicking the button on the bottom right.
+          <br>
+          <br>
+          If you have any issues, check out the <a href="http://gamebanana.com/tools/12471">gamebanana page</a>
         </p>
-        <br>
         <span class="highlight">Please make sure all the mods you currently have inside GIMI are also in your mod folder, this tool will delete folders from the gimi mod folder when setting new mods to active</span>
       </div>
 
       <div v-if="settings.get('gimiFolder')"> Current GIMI folder: {{ settings.get('gimiFolder') }}</div>
-      <!-- <div v-else>
-        No GIMI folder set, please select the mods folder in your GIMI directory
-        <button @click="ipcRenderer.send('selectGimiFolder')">Add GIMI mod Folder</button>
-      </div> -->
-      
     </div>
   </div>
 </template>
