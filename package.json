@@ -13,6 +13,7 @@
     "make": "electron-builder -w --x64"
   },
   "dependencies": {
+    "electron-is-dev": "^2.0.0",
     "electron-store": "^8.1.0",
     "marked": "^4.2.12",
     "pinia": "^2.0.32",

@@ -42,8 +42,8 @@ const template = [
     }
 ]
 
-  // const menu = Menu.buildFromTemplate(template)
-  // Menu.setApplicationMenu(menu)
+  const menu = Menu.buildFromTemplate(template)
+  Menu.setApplicationMenu(menu)
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
@@ -106,7 +106,9 @@ ipcMain.on('selectGimiFolder',(e) => {
 // deep links
 let mainWindow;
 let deeplinkingUrl;
-app.setAsDefaultProtocolClient('GIMM')
+if (!app.isDefaultProtocolClient('GIMM')) {
+  app.setAsDefaultProtocolClient('GIMM');
+}
 
 // Force single application instance
 const gotTheLock = app.requestSingleInstanceLock();

@@ -40,10 +40,18 @@ const getGimi = (f) => {
     const removeFromList = () =>{
       Object.keys(characterMods).forEach(n=>{
         if(n.toLowerCase().endsWith('mod')){
-          characterMods[n.substring(0,n.length-3)]= characterMods[n]
+          characterMods[n.substring(0,n.length-3)] = characterMods[n]
           delete characterMods[n]
         }
-        // if(charIgnore.indexOf(n) >= 0 || n.startsWith('DISABLED')) delete characterMods[n]
+        if( n.startsWith('DISABLED')) {
+          //clear white space goota
+          let getName = n.substring(8,n.length).replace(/\s/g,'')
+          let fLet = getName.charAt(0).toUpperCase()
+          getName = fLet + getName.slice(1)
+          console.log('gimi res');
+          console.log(characterMods[getName]);
+          characterMods[getName] = characterMods[n]
+        } 
       })
     }
     removeFromList()

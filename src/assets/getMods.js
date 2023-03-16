@@ -55,11 +55,28 @@ const getMods = (f) => {
       Object.keys(characterMods).forEach(n=>{
         if(n.toLowerCase().endsWith('mod')){
           if (characterMods[n.substring(0,n.length-3)]) {
-            characterMods[n.substring(0,n.length-3)].push(characterMods[n][0])
+            characterMods[n].forEach(nm => {
+              characterMods[n.substring(0,n.length-3)].push(nm)
+            })
             delete characterMods[n]
           }
         }
-        if(charIgnore.indexOf(n) >= 0 || n.startsWith('DISABLED')) delete characterMods[n]
+        if(charIgnore.indexOf(n) >= 0 ) delete characterMods[n]
+        if( n.startsWith('DISABLED')) {
+          //clear white space goota
+          let getName = n.substring(8,n.length).replace(/\s/g,'')
+          let fLet = getName.charAt(0).toUpperCase()
+          getName = fLet + getName.slice(1)
+          console.log('disabled');
+          console.log(getName);
+          if (characterMods[getName]) {
+            characterMods[n].forEach(nm => {
+              characterMods[getName].push(nm)
+            })
+            delete characterMods[n]
+          }
+          // delete characterMods[n]
+        } 
       })
     }
     removeFromList()
