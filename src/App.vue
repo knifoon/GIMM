@@ -3,7 +3,9 @@ import {ref} from 'vue'
 import Content from './components/Content.vue'
 import { getMods } from "@/assets/getMods.js"
 import { getGimi } from "@/assets/getGimi.js"
+import log from 'electron-log/renderer';
 
+log.info('Log from the renderer process');
 const {ipcRenderer} = require('electron')
 const Store = require('electron-store');
 
@@ -59,6 +61,9 @@ let showSetup = ref(true)
 if(settings.get('gimiFolder') && settings.get('modFolder')) showSetup.value=false
 </script>
 <template>
+  <!-- <div id="stars"></div>
+<div id="stars2"></div>
+<div id="stars3"></div> -->
 <div class="content-head" v-show="!showSetup"><h2>Information</h2></div>
 <div class="list-head" v-show="!showSetup"><h2>Mod List</h2></div>
 

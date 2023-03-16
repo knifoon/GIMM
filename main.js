@@ -3,8 +3,13 @@
 const { app, BrowserWindow, ipcMain, dialog, shell,Menu , MenuItem, webContents } = require('electron')
 const path = require('path')
 const Store = require('electron-store')
+const log = require('electron-log')
+
 Store.initRenderer()
 
+log.initialize({ preload: true });
+
+log.info('Log from the main process')
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -42,8 +47,8 @@ const template = [
     }
 ]
 
-  const menu = Menu.buildFromTemplate(template)
-  Menu.setApplicationMenu(menu)
+  // const menu = Menu.buildFromTemplate(template)
+  // Menu.setApplicationMenu(menu)
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
