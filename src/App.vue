@@ -1,6 +1,7 @@
 <script setup>
 import {ref} from 'vue'
 import Content from './components/Content.vue'
+import Setup from './components/Setup.vue'
 import { getMods } from "@/assets/getMods.js"
 import { getGimi } from "@/assets/getGimi.js"
 import log from 'electron-log/renderer';
@@ -64,28 +65,17 @@ let showSetup = ref(true)
 if(settings.get('gimiFolder') && settings.get('modFolder')) showSetup.value=false
 </script>
 <template>
-  <div v-if="showSetup">
-    <div id="stars"></div>
-    <div id="stars2"></div>
-    <div id="stars3"></div>
-  </div>
-  <div class="content-head" v-show="!showSetup"><h2>Information</h2></div>
-<div class="list-head" v-show="!showSetup"><h2>Mod List</h2></div>
+  <Transition>
+    <div class="starmap" v-if="showSetup">
+      <div id="stars"></div>
+      <div id="stars2"></div>
+      <div id="stars3"></div>
+    </div>  
+  </Transition>
 
-<div v-if="showSetup" class="setup">
-  <div class="welk">
-    <img src="/images/welk.png" alt="" >
-    <img src="/images/welkbg.png" alt="" >
-  </div>
-  <div class="setup-content">
-    <div v-if="GBLink"> Searching Game Banana </div>
-    <strong>Mod Collection</strong>: a folder with all your mods, unzipped.
-    <br>
-    <strong>GIMI Mods</strong>: GIMI/3dmigoto's Mods folder.
-  </div>
-  <button @click="ipcRenderer.send('selectModFolder')" class="mod-button">Add Mod Collection</button>
-  <button @click="ipcRenderer.send('selectGimiFolder')" class="gimi-button">Add GIMI Mods</button>
-  </div>
+<div class="content-head" v-show="!showSetup"><h2>Information</h2></div>
+<div class="list-head" v-show="!showSetup"><h2>Mod List</h2></div>
+  <Setup v-if="showSetup"/>
 <Content v-if="!showSetup" :mods="currentContent" :characterName="currentCharacter" :activeMods="activeMods" v-on:updateGimi="updateGimi"></Content>
 <div v-if="!showSetup" class="character-list">
   <div v-if="showList">
@@ -101,76 +91,6 @@ if(settings.get('gimiFolder') && settings.get('modFolder')) showSetup.value=fals
 </template>
 
 <style scoped>
-.setup {
-  width: 80%;
-  margin: auto;
-  display: grid;
-  padding: 1rem;
-  grid-column-start: content;
-  grid-row-start: content;
-  grid-column-end: sidebar;
-  grid-row-end: sidebar;
-  text-align: center;
-  grid-template-areas: 
-    "img img"
-    "content content"
-    "modbutton gimibutton";
-  
-}
-.welk {
-  grid-area: img;
-  position: relative;
-  width: 400px;
-  margin: auto;
-  display: block;
-}
-.welk img {
-  width: 100%;
-}
-.welk img:first-child {
-  z-index: 2;
-}
-@keyframes rotate {
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(359deg);
-  }
-}
-.welk img:nth-child(2) {
-  position: absolute;
-    height: 300px;
-    width: 300px;
-    left: 50px;
-    top: 0;
-    animation: rotate linear 50s infinite forwards;
-    mix-blend-mode: screen;
-    filter: hue-rotate(63deg);
-}
-.setup button {
-  cursor: pointer;
-  background: #333035;
-  color: var(--vt-c-white-mute);
-  padding: 10px;
-  border: none;
-  border-radius: 3px;
-  width: 200px;
-  margin: auto;
-}
-.setup button:hover {
-  background: #413E44;
-}
-.setup-content {
-  grid-area: content;
-  padding: 2rem;
-}
-.mod-button {
-  grid-area: modbutton;
-}
-.gimi-button {
-  grid-area: gimibutton;
-}
 .content-head {
   grid-area: h1;
   padding: 1rem;
@@ -187,9 +107,10 @@ if(settings.get('gimiFolder') && settings.get('modFolder')) showSetup.value=fals
 .content {
   padding: 2rem;
   grid-area: content;
-  background: var(--vt-c-white-mute);
-  color: var(--vt-c-black-soft);
+  background: #3d3d3d;
+  /* color: var(--vt-c-black-soft); */
   overflow-y: scroll;
+  border-radius: 0 10px 10px 0;
 }
 .character-list {
   grid-area: sidebar;
@@ -205,5 +126,8 @@ if(settings.get('gimiFolder') && settings.get('modFolder')) showSetup.value=fals
 .character-list .active {
   color: #fff;
   font-weight: bold;
+}
+.starmap {
+  position: absolute;
 }
 </style>

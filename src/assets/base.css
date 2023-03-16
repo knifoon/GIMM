@@ -34,8 +34,8 @@
   --color-text: var(--vt-c-text-light-1);
 
   --section-gap: 160px;
+  --color-border: #494949;
 }
-
 @media (prefers-color-scheme: dark) {
   :root {
     --color-background: var(--vt-c-black);

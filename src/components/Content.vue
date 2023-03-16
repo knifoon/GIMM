@@ -96,17 +96,18 @@ header div {
   flex-grow: 1;
   font-size: 24px;
   font-weight: bold;
+  color: #fff;
 }
 .mod-li:last-child div:first-child{
-border-bottom: solid 1px #ddd;
+border-bottom: solid 1px var(--color-border);
 }
 .mod-li div:first-child{
-  border: solid 1px #ddd;
+  border: solid 1px var(--color-border);
   border-bottom: none;
   padding: 0.5rem ;
 }
 .mod-li div:nth-child(2){
-  border: solid 1px #ddd;
+  border: solid 1px var(--color-border);
   padding: 0.5rem ;
   margin-bottom: 0.5rem;
 }
@@ -124,19 +125,22 @@ border-bottom: solid 1px #ddd;
   font-weight: bold;
 }
 .toggle {
-  background: rgb(130, 165, 219);
+  background: #46535f;
 }
 .disable{
-  background: #c95d63;
+  background: #985054;
 }
 .rm-toggle {
   cursor: pointer;
   margin: 0 10px;
   height: 34px;
   border: none;
+  background: none;
+  filter: invert(1);
+  opacity: 50%;
 }
 .active-mod {
-  background: #5adc97;
+  background: #47745c;
 }
 .mod-info {
   display: flex;
@@ -156,7 +160,8 @@ border-bottom: solid 1px #ddd;
   display: inline-block;
   padding: 20px;
   font-weight: bold;
-  background: #fdf196;
+  background: #38495a;
+  color: var(--vt-c-white-soft);
 }
 </style>
 
@@ -174,7 +179,8 @@ display: block;
   margin: 10px 0;
 }
 .readme blockquote {
-  background: #ddd;
+  background: var(--vt-c-white-mute);
+  color: var(--vt-c-black-mute);
   border-radius: 3px;
   padding: 10px;
   margin: 10px;

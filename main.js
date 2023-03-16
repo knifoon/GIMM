@@ -20,7 +20,7 @@ const createWindow = () => {
       nodeIntegrationInWorker: true, // <---  for web workers
       enableRemoteModule: true,
       contextIsolation: false,
-      preload: path.join(__dirname, 'preload.js')
+      preload: 'preload.js'
     },
     resizable: false
   })

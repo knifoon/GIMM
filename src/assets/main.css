@@ -1,17 +1,11 @@
 @import './base.css';
 @import './stars.css';
+
 #app {
   width: 100vw;
   height: 100vh;
   margin: 0 auto;
   font-weight: normal;
-}
-
-li {
-  list-style: none;
-}
-
-#app {
   display: grid;
   grid-template-areas: 
     "h1 h2"
@@ -20,9 +14,24 @@ li {
   grid-template-columns: 2fr 1fr;
   grid-template-rows: 50px auto 50px;
 }
-
-p{
+p {
   margin: 10px 0;
 }
+li {
+  list-style: none;
+}
+strong {
+  font-weight: bold;
+}
+a {
+  color: #fff;
+}
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 2s ease;
+}
 
-
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
