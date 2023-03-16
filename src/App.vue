@@ -42,6 +42,9 @@ ipcRenderer.on('gimiFolder',(e,f) =>{
 ipcRenderer.on("handle-deep-link",link => {
   GBLink.value = true;
 })
+ipcRenderer.on("resetFolders",link => {
+  resetFolders()
+})
 const changeContent = (con,char) => {
   if(settings.get('gimiFolder')){
     currentContent.value = con

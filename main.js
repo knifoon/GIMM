@@ -32,8 +32,9 @@ const template = [
   {
   label: app.name.toUpperCase(),
       submenu: [
+        {role: 'reload'},
          {role: 'quit'},
-         {role: 'reload'}
+         {role: 'toggleDevTools'}
       ]
   },
   {
@@ -43,13 +44,18 @@ const template = [
           click: async () => {
           const { shell } = require('electron')
           await shell.openExternal('https://gamebanana.com/tools/12471')}
+        },
+        { label: 'Reset Folders',
+          click: () => {
+          mainWindow.webContents.send('resetFolders',true)
+          }
         }
       ]
     }
 ]
 
-  // const menu = Menu.buildFromTemplate(template)
-  // Menu.setApplicationMenu(menu)
+  const menu = Menu.buildFromTemplate(template)
+  Menu.setApplicationMenu(menu)
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
