@@ -61,10 +61,12 @@ let showSetup = ref(true)
 if(settings.get('gimiFolder') && settings.get('modFolder')) showSetup.value=false
 </script>
 <template>
-  <!-- <div id="stars"></div>
-<div id="stars2"></div>
-<div id="stars3"></div> -->
-<div class="content-head" v-show="!showSetup"><h2>Information</h2></div>
+  <div v-if="showSetup">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>
+  </div>
+  <div class="content-head" v-show="!showSetup"><h2>Information</h2></div>
 <div class="list-head" v-show="!showSetup"><h2>Mod List</h2></div>
 
 <div v-if="showSetup" class="setup">
@@ -140,6 +142,8 @@ if(settings.get('gimiFolder') && settings.get('modFolder')) showSetup.value=fals
     left: 50px;
     top: 0;
     animation: rotate linear 50s infinite forwards;
+    mix-blend-mode: screen;
+    filter: hue-rotate(63deg);
 }
 .setup button {
   cursor: pointer;

@@ -13,15 +13,16 @@ log.info('Log from the main process')
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1200,
+    height: 900,
     webPreferences: {
       nodeIntegration: true, // <--- flag
       nodeIntegrationInWorker: true, // <---  for web workers
       enableRemoteModule: true,
       contextIsolation: false,
       preload: path.join(__dirname, 'preload.js')
-    }
+    },
+    resizable: false
   })
   // and load the index.html of the app.
   mainWindow.loadFile('dist/index.html')
