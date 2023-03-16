@@ -54,8 +54,10 @@ const getMods = (f) => {
     const removeFromList = () =>{
       Object.keys(characterMods).forEach(n=>{
         if(n.toLowerCase().endsWith('mod')){
-          characterMods[n.substring(0,n.length-3)].push(characterMods[n][0])
-          delete characterMods[n]
+          if (characterMods[n.substring(0,n.length-3)]) {
+            characterMods[n.substring(0,n.length-3)].push(characterMods[n][0])
+            delete characterMods[n]
+          }
         }
         if(charIgnore.indexOf(n) >= 0 || n.startsWith('DISABLED')) delete characterMods[n]
       })

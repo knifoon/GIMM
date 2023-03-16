@@ -36,7 +36,9 @@ ipcRenderer.on('gimiFolder',(e,f) =>{
   activeMods.value = getGimi(f)
   if(settings.get('modFolder')) showSetup.value = false
 })
-
+ipcRenderer.on("handle-deep-link",link => {
+  console.log('got the link : ', link)
+})
 const changeContent = (con,char) => {
   if(settings.get('gimiFolder')){
     currentContent.value = con
@@ -57,16 +59,20 @@ if(settings.get('gimiFolder') && settings.get('modFolder')) showSetup.value=fals
 </script>
 <template>
 <div class="content-head" v-show="!showSetup"><h2>Information</h2></div>
-<div class="list-head" v-show="!showSetup"><h2>Characters</h2></div>
+<div class="list-head" v-show="!showSetup"><h2>Mod List</h2></div>
 
 <div v-if="showSetup" class="setup">
-  <img class= "welk" src="/images/gimmbg.png" alt="" >
-  <div class="setup-content">
-    Please add your a folder with all your mods, unzipped.
-    And Add GIMI/3dmigoto's Mods folder.
+  <div class="welk">
+    <img src="/images/welk.png" alt="" >
+    <img src="/images/welkbg.png" alt="" >
   </div>
-  <button @click="ipcRenderer.send('selectModFolder')" class="mod-button">Add Mod Folder</button>
-  <button @click="ipcRenderer.send('selectGimiFolder')" class="gimi-button">Add GIMI mod Folder</button>
+  <div class="setup-content">
+    <strong>Mod Collection</strong>: a folder with all your mods, unzipped.
+    <br>
+    <strong>GIMI Mods</strong>: GIMI/3dmigoto's Mods folder.
+  </div>
+  <button @click="ipcRenderer.send('selectModFolder')" class="mod-button">Add Mod Collection</button>
+  <button @click="ipcRenderer.send('selectGimiFolder')" class="gimi-button">Add GIMI Mods</button>
   </div>
 <Content v-if="!showSetup" :mods="currentContent" :characterName="currentCharacter" :activeMods="activeMods" v-on:updateGimi="updateGimi"></Content>
 <div v-if="!showSetup" class="character-list">
@@ -101,9 +107,32 @@ if(settings.get('gimiFolder') && settings.get('modFolder')) showSetup.value=fals
 }
 .welk {
   grid-area: img;
+  position: relative;
   width: 400px;
   margin: auto;
   display: block;
+}
+.welk img {
+  width: 100%;
+}
+.welk img:first-child {
+  z-index: 2;
+}
+@keyframes rotate {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+.welk img:nth-child(2) {
+  position: absolute;
+    height: 300px;
+    width: 300px;
+    left: 50px;
+    top: 0;
+    animation: rotate linear 50s infinite forwards;
 }
 .setup button {
   cursor: pointer;

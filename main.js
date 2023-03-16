@@ -24,9 +24,8 @@ const createWindow = () => {
   // Menu Setup
 const template = [
   {
-  label: app.name,
+  label: app.name.toUpperCase(),
       submenu: [
-         {label:'Settings'},
          {role: 'quit'},
          {role: 'reload'}
       ]
@@ -43,8 +42,8 @@ const template = [
     }
 ]
 
-  const menu = Menu.buildFromTemplate(template)
-  Menu.setApplicationMenu(menu)
+  // const menu = Menu.buildFromTemplate(template)
+  // Menu.setApplicationMenu(menu)
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
@@ -104,3 +103,41 @@ ipcMain.on('selectGimiFolder',(e) => {
     console.log(err)
   })
 })
+// // deep links
+// let mainWindow;
+// let deeplinkingUrl;
+// app.setAsDefaultProtocolClient('GIMM')
+
+// // Force single application instance
+// const gotTheLock = app.requestSingleInstanceLock();
+
+// if (!gotTheLock) {
+//   app.quit();
+//   return;
+// } else {
+//   app.on('second-instance', (e, argv) => {
+//     if (process.platform !== 'darwin') {
+//       // Find the arg that is our custom protocol url and store it
+//       deeplinkingUrl = argv.find((arg) => arg.startsWith('GIMM://'));
+//     }
+
+//     if (mainWindow) {
+//       if (mainWindow.isMinimized()) mainWindow.restore();
+//       mainWindow.focus();
+//     }
+//   });
+// }
+//   let modLink;
+// app.on("open-url", async (event, url) => {
+//   modLink = url;
+//   event.preventDefault();
+//   let mainWindow = BrowserWindow.getAllWindows()[0];
+//   if (mainWindow) {
+//     mainWindow.focus();
+//   } else {
+//     await createWindow();
+//     mainWindow = BrowserWindow.getAllWindows()[0];
+//   }
+//   mainWindow.webContents
+//   // mainWindow.webContents.send("handle-deep-link", url);
+// });
