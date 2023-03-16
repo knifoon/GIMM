@@ -11,6 +11,7 @@ const settings = new Store();
 
 
 let showList = ref(false)
+let GBLink = ref(false)
 let modList = {}
 let currentContent = ref(null)
 let currentCharacter = ref(null)
@@ -37,7 +38,7 @@ ipcRenderer.on('gimiFolder',(e,f) =>{
   if(settings.get('modFolder')) showSetup.value = false
 })
 ipcRenderer.on("handle-deep-link",link => {
-  console.log('got the link : ', link)
+  GBLink.value = true;
 })
 const changeContent = (con,char) => {
   if(settings.get('gimiFolder')){
@@ -67,6 +68,7 @@ if(settings.get('gimiFolder') && settings.get('modFolder')) showSetup.value=fals
     <img src="/images/welkbg.png" alt="" >
   </div>
   <div class="setup-content">
+    <div v-if="GBLink"> Searching Game Banana </div>
     <strong>Mod Collection</strong>: a folder with all your mods, unzipped.
     <br>
     <strong>GIMI Mods</strong>: GIMI/3dmigoto's Mods folder.
