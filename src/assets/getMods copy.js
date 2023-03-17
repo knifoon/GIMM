@@ -1,7 +1,7 @@
 const {readFileSync, readdirSync} = require('fs')
 
 const getMods = (f) => {
-    let modList = {};
+    let characterMods = {};
     readdirSync(f,{withFileTypes: true}).forEach((mod)=>{
       if(mod.isDirectory()) {
         let modInfo = {
@@ -9,10 +9,9 @@ const getMods = (f) => {
         path: `${f}/${mod.name}`,
         modFolderPath: `${f}/${mod.name}`
         } 
-        //find Readme
+        //find ini
         let readmeFile = readdirSync(modInfo.path).find(file => file.toLowerCase().startsWith('readme')) || null;
         if(readmeFile) modInfo.readme = `${modInfo.path}/${readmeFile}`
-        //Identify Mod folder
         let iniFile = readdirSync(modInfo.path).find(file => file.endsWith('.ini')) || null;
         if(iniFile) {
           modInfo.character = iniFile.substring(0,iniFile.length-4)
@@ -41,62 +40,46 @@ const getMods = (f) => {
             } else return true
           })
         }
-        // Add to list of mods
-        if(readdirSync(modInfo.modFolderPath).find(file => file == 'GIMM.jsonc')){
-          modInfo.gimm = readFileSync(`${modInfo.modFolderPath}/GIMM.jsonc`,'utf8')
-        }
-        // Use GIMM.jsonc
-        let modInfoOut = {
-          character : modInfo.character,
+        if(!characterMods[modInfo.character]) characterMods[modInfo.character] = []
+        characterMods[modInfo.character].push({
           name : modInfo.folderName,
           path : modInfo.modFolderPath,
           readme: modInfo.readme || null
-        }
-        if (modInfo.gimm) {
-          const stripJSONComments = (data) => {
-            var re = new RegExp("\/\/(.*)","g");
-            return data.replace(re,'');
-          }
-          modInfo.gimm = stripJSONComments(modInfo.gimm)
-          let gimm = JSON.parse(modInfo.gimm)
-          modInfoOut.character = gimm.character;
-          modInfoOut.gimm = gimm
-          // modInfoOut.name = gimm.name
-        }
-        if(!modList[modInfoOut.character]) modList[modInfoOut.character] = []
-        modList[modInfo.character].push(modInfoOut)
+        })
       }
     });
-    // ModList Filters
     // "characters to ignore
     let charIgnore = ['CharacterShaders', 'undefined']
     const removeFromList = () =>{
-      Object.keys(modList).forEach(n=>{
+      Object.keys(characterMods).forEach(n=>{
         if(n.toLowerCase().endsWith('mod')){
-          if (modList[n.substring(0,n.length-3)]) {
-            modList[n].forEach(nm => {
-              modList[n.substring(0,n.length-3)].push(nm)
+          if (characterMods[n.substring(0,n.length-3)]) {
+            characterMods[n].forEach(nm => {
+              characterMods[n.substring(0,n.length-3)].push(nm)
             })
-            delete modList[n]
+            delete characterMods[n]
           }
         }
-        if(charIgnore.indexOf(n) >= 0 ) delete modList[n]
+        if(charIgnore.indexOf(n) >= 0 ) delete characterMods[n]
         if( n.startsWith('DISABLED')) {
-          // sort mods with disabled ini files
+          //clear white space goota
           let getName = n.substring(8,n.length).replace(/\s/g,'')
           let fLet = getName.charAt(0).toUpperCase()
           getName = fLet + getName.slice(1)
-          if (modList[getName]) {
-            modList[n].forEach(nm => {
-              modList[getName].push(nm)
+          console.log('disabled');
+          console.log(getName);
+          if (characterMods[getName]) {
+            characterMods[n].forEach(nm => {
+              characterMods[getName].push(nm)
             })
-            delete modList[n]
+            delete characterMods[n]
           }
+          // delete characterMods[n]
         } 
       })
     }
     removeFromList()
-    console.log(Object.keys(modList))
-    return modList
+    console.log(Object.keys(characterMods))
+    return characterMods
   }
 export {getMods}
