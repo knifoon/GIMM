@@ -47,8 +47,8 @@ const getMods = (f) => {
         }
         // Use GIMM.jsonc
         let modInfoOut = {
-          character : modInfo.character,
           name : modInfo.folderName,
+          character : modInfo.character,
           path : modInfo.modFolderPath,
           readme: modInfo.readme || null
         }
@@ -61,7 +61,6 @@ const getMods = (f) => {
           let gimm = JSON.parse(modInfo.gimm)
           modInfoOut.character = gimm.character;
           modInfoOut.gimm = gimm
-          // modInfoOut.name = gimm.name
         }
         if(!modList[modInfoOut.character]) modList[modInfoOut.character] = []
         modList[modInfo.character].push(modInfoOut)
@@ -75,6 +74,7 @@ const getMods = (f) => {
         if(n.toLowerCase().endsWith('mod')){
           if (modList[n.substring(0,n.length-3)]) {
             modList[n].forEach(nm => {
+              nm.character = n.substring(0,n.length-3)
               modList[n.substring(0,n.length-3)].push(nm)
             })
             delete modList[n]

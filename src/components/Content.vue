@@ -1,11 +1,10 @@
 <script setup>
+import { objectExpression } from "@babel/types";
 import { marked } from "marked";
-import {ref, defineEmits} from 'vue'
+import {ref, defineEmits, watch} from 'vue'
 
 const emit = defineEmits(['updateGimi'])
 const props = defineProps(['mods','characterName','activeMods'])
-console.log('from content')
-console.log(props.mods)
 const {ipcRenderer} = require('electron')
 const {readFileSync, readdirSync, rmSync, cpSync} = require('fs')
 
@@ -15,10 +14,15 @@ const settings = new Store();
 
 const renderRM = (file) => marked.parse(readFileSync(file,'utf-8'));
 
-let activeRM = ref('none');
-let rmToggle = (rm) => {
-if (activeRM.value == rm) activeRM.value = 'none'
-else activeRM.value = rm
+let activeRM = ref('none')
+let activeVariant = ref('none')
+let rmToggle = (rm,variant = null) => {
+  if (variant){
+    if(activeVariant.value == variant) activeVariant.value = 'none'
+    else activeVariant.value =  variant
+  } else activeVariant.value = 'none'
+  if (activeRM.value == rm && activeVariant.value == 'none') activeRM.value = 'none'
+  else activeRM.value = rm
 }
 let compareMods = (p) => {
   if(props.activeMods[props.characterName]){
@@ -26,12 +30,9 @@ let compareMods = (p) => {
     let comp = p.split('/')
     let cur =  comp[comp.length -1]
     let active = gimiMod[gimiMod.length -1]
-    console.log(`active : ${active} check : ${cur}`);
     if(cur == active) return true
   } else return false
 }
-console.log('mods!!!')
-console.log(props.activeMods)
 let rmMod = () => {
   rmSync(props.activeMods[props.characterName][0].path,{recursive: true})
   emit('updateGimi')
@@ -44,7 +45,44 @@ let swapMods = (p) => {
   }
   cpSync(p,`${settings.get('gimiFolder')}/${cur}`,{recursive: true})
   emit('updateGimi')
+} 
+let sortedMods = ref(null)
+let sortMods = (m) => {
+  let modList = []
+  let collections = {}
+  m.forEach(listed => {
+    let {character,gimm,name,path,readme} = listed
+    // get data from GIMM
+    if(gimm){
+      character = gimm.character
+      name = gimm.name
+      let {author,version} = gimm
+      //bundle collections
+      if(gimm.collection){
+        if (!collections[gimm.collection]) collections[gimm.collection] = []
+        collections[gimm.collection]
+        .push({character,name,path,readme,author,version})
+      } else modList.push({name,character,path,readme,author,version})
+    } else modList.push(listed)
+  })
+  //add each collection to modlist
+  Object.keys(collections).forEach(col => {
+    modList.push({name: col, collection:collections[col]})
+  })
+  sortedMods.value = modList.sort((a,b)=>{
+    if ( a.name < b.name ){
+    return -1;
+  }
+  if ( a.name > b.name ){
+    return 1;
+  }
+    return 0;
+  })
 }
+watch(() => props.mods, (newValue) => {
+  sortMods(newValue)
+ });
+   
 </script>
 
 <template>
@@ -54,14 +92,23 @@ let swapMods = (p) => {
         <div>{{ props.characterName }}</div>
         <button class="disable" v-if="props.activeMods[props.characterName]" @click="rmMod">Disable</button>
       </header>
-    <li class="mod-li" v-for="item in props.mods">
-      <div class="mod-info">
+    <li class="mod-li" v-for="item in sortedMods">
+      <div class="mod-collection" v-if="item.collection">
+        <span class="collection-name">{{ item.name }}</span>
+        <div v-for="variant in item.collection" class="mod-info">
+          <span class="mod-name">{{ variant.name }}</span>
+          <button v-if="variant.readme" @click="item.readme = variant.readme ,rmToggle(item.name,variant.name)" class="rm-toggle"><img src="/images/info.svg" title="readme"></button>
+          <button class="toggle" v-if="!compareMods(variant.path)" @click="swapMods(variant.path)">Enable</button>
+          <span v-else class="active-mod">Active</span>
+        </div>
+      </div>
+      <div class="mod-info" v-else>
         <span class="mod-name">{{ item.name }}</span>
         <button v-if="item.readme" @click="rmToggle(item.name)" class="rm-toggle"><img src="/images/info.svg" title="readme"></button>
         <button class="toggle" v-if="!compareMods(item.path)" @click="swapMods(item.path)">Enable</button>
         <span v-else class="active-mod">Active</span>
       </div>
-    <div class="readme" v-if="activeRM == item.name" v-html="renderRM(item.readme)"></div>
+      <div class="readme" v-if="activeRM == item.name" v-html="renderRM(item.readme)"></div>
     </li>
     </div>
     <div v-else>
@@ -101,12 +148,28 @@ header div {
 .mod-li:last-child div:first-child{
 border-bottom: solid 1px var(--color-border);
 }
-.mod-li div:first-child{
+.mod-li .mod-info:first-child{
   border: solid 1px var(--color-border);
   border-bottom: none;
   padding: 0.5rem ;
 }
-.mod-li div:nth-child(2){
+.collection-name {
+  display: block;
+}
+.mod-collection {
+  border: solid 1px var(--vt-c-black-soft);
+  background: var(--vt-c-black-soft);
+  padding-bottom: .5em;
+
+}
+.mod-collection .mod-info{
+  border-top: solid 1px var(--color-border);
+  padding: 0.5rem ;
+}
+.mod-collection .mod-info:last-child{
+  border-bottom: solid 1px var(--color-border);
+}
+.mod-li .readme{
   border: solid 1px var(--color-border);
   padding: 0.5rem ;
   margin-bottom: 0.5rem;
