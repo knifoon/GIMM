@@ -154,3 +154,16 @@ app.on("open-url", async (event, url) => {
   }
   webContents.send("handle-deep-link", url);
 });
+
+//right click
+ipcMain.on('show-context-menu', (event,args) => {
+  console.log(args);
+  const template = [
+    {
+      label: 'Edit Info',
+      click: () => { event.sender.send('context-menu-command', 'edit') }
+    }
+  ]
+  const menu = Menu.buildFromTemplate(template)
+  menu.popup(BrowserWindow.fromWebContents(event.sender))
+})

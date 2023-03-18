@@ -15,6 +15,39 @@ const settings = new Store();
 
 const renderRM = (file) => marked.parse(readFileSync(file,'utf-8'));
 
+//right click
+window.addEventListener('contextmenu', (e) => {
+  e.preventDefault()
+  if(e.target.className == 'mod-name') {
+    let modName = e.target.innerText;
+    let out;
+    //check if variant
+    if (sortedMods.value.find(m => m.name == modName)) {
+      out = sortedMods.value.filter(m => m.name == modName)
+      console.log(out);
+    } else {
+      let collectionName = e.target.closest('.mod-collection').querySelector('.collection-name').innerText
+      let ctest = sortedMods.value.filter(m => m.name == collectionName)[0]
+      console.log(ctest)
+      ctest.collection.forEach(m => {
+        if(m.name == modName){
+          out = m
+        }
+      })
+      console.log(out);
+    }
+    let currentMod = JSON.stringify(out)
+    console.log(currentMod);
+    ipcRenderer.send('show-context-menu',currentMod)
+  }
+})
+
+ipcRenderer.on('context-menu-command', (e, command) => {
+  // ...
+  console.log(e);
+})
+//
+
 let activeRM = ref('none')
 let activeVariants = ref({})
 let rmToggle = (rm,variant = null) => {
