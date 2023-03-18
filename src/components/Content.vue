@@ -15,13 +15,14 @@ const settings = new Store();
 const renderRM = (file) => marked.parse(readFileSync(file,'utf-8'));
 
 let activeRM = ref('none')
-let activeVariant = ref('none')
+let activeVariants = ref({})
 let rmToggle = (rm,variant = null) => {
-  if (variant){
-    if(activeVariant.value == variant) activeVariant.value = 'none'
-    else activeVariant.value =  variant
-  } else activeVariant.value = 'none'
-  if (activeRM.value == rm && activeVariant.value == 'none') activeRM.value = 'none'
+  // if (variant){
+  //   if(activeVariant.value == variant) activeVariant.value = 'none'
+  //   else activeVariant.value =  variant
+  // } else activeVariant.value = 'none'
+  // if (activeRM.value == rm && activeVariant.value == 'none') activeRM.value = 'none'
+  if (activeRM.value == rm ) activeRM.value = 'none'
   else activeRM.value = rm
 }
 let compareMods = (p) => {
@@ -81,8 +82,28 @@ let sortMods = (m) => {
 }
 watch(() => props.mods, (newValue) => {
   sortMods(newValue)
+  console.log(sortedMods.value);
+  sortedMods.value.forEach(listItem =>{
+    if (listItem.collection) {
+      listItem.collection.forEach(variant => {
+        if (compareMods(variant.path)) activeVariants.value[listItem.name] = variant.name
+      })
+      if (!activeVariants.value[listItem.name]) activeVariants.value[listItem.name] = listItem.collection[0].name
+
+    }
+  })
+
  });
    
+ let activeDrop = ref(null)
+ let showVariants = (col) => {
+  if(activeDrop.value == col) activeDrop.value = null;
+  else activeDrop.value = col
+ }
+ let changeVariant = () => {
+
+
+ }
 </script>
 
 <template>
@@ -95,11 +116,19 @@ watch(() => props.mods, (newValue) => {
     <li class="mod-li" v-for="item in sortedMods">
       <div class="mod-collection" v-if="item.collection">
         <span class="collection-name">{{ item.name }}</span>
-        <div v-for="variant in item.collection" class="mod-info">
-          <span class="mod-name">{{ variant.name }}</span>
-          <button v-if="variant.readme" @click="item.readme = variant.readme ,rmToggle(item.name,variant.name)" class="rm-toggle"><img src="/images/info.svg" title="readme"></button>
-          <button class="toggle" v-if="!compareMods(variant.path)" @click="swapMods(variant.path)">Enable</button>
-          <span v-else class="active-mod">Active</span>
+        <button @click="showVariants(item.name)" class="dd-button"></button>
+        <!-- variant select -->
+        <ul v-if="activeDrop == item.name" class="var-dropdown">
+          <li v-for="variant in item.collection" @click="activeVariants[item.name] = variant.name , activeDrop = null">{{ variant.name }}</li>
+        </ul>
+        <div v-for="(variant, index) in item.collection">
+          <div v-if="activeVariants[item.name] == variant.name" class="mod-info">
+            <span class="mod-name">{{ variant.name }}</span>
+            <button v-if="variant.readme" @click="item.readme = variant.readme ,rmToggle(item.name)" class="rm-toggle"><img src="/images/info.svg" title="readme"></button>
+            <button class="toggle" v-if="!compareMods(variant.path)" @click="swapMods(variant.path)">Enable</button>
+            <span v-else class="active-mod">Active</span>
+            <!-- now we need to set active variant to be set to the active mod in needed -->
+          </div>
         </div>
       </div>
       <div class="mod-info" v-else>
@@ -155,6 +184,8 @@ border-bottom: solid 1px var(--color-border);
 }
 .collection-name {
   display: block;
+  padding: 5px;
+  font-weight: bold;
 }
 .mod-collection {
   border: solid 1px var(--vt-c-black-soft);
@@ -163,11 +194,9 @@ border-bottom: solid 1px var(--color-border);
 
 }
 .mod-collection .mod-info{
-  border-top: solid 1px var(--color-border);
+  border: none !important;
   padding: 0.5rem ;
-}
-.mod-collection .mod-info:last-child{
-  border-bottom: solid 1px var(--color-border);
+  margin-left: 30px;
 }
 .mod-li .readme{
   border: solid 1px var(--color-border);
@@ -225,6 +254,32 @@ border-bottom: solid 1px var(--color-border);
   font-weight: bold;
   background: #38495a;
   color: var(--vt-c-white-soft);
+}
+.dd-button {
+  position: absolute;
+  z-index: 11;
+  background: url('/images/chevron-right.svg') no-repeat;
+  background-position: center;
+  border: none;
+  height: 50px;
+  width:  40px;
+  cursor: pointer;
+  opacity: 65%;
+}
+.dd-button:hover {
+  opacity: 100%;
+}
+.var-dropdown {
+  position: absolute;
+  background-color: var(--vt-c-white-mute);
+  color: var(--vt-c-black-soft);
+  padding: 5px;
+  margin-left: 30px;
+  z-index: 10;
+}
+.var-dropdown li {
+  cursor: pointer;
+  padding: 5px;
 }
 </style>
 
