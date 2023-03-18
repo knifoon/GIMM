@@ -1,5 +1,4 @@
 <script setup>
-import { objectExpression } from "@babel/types";
 import { marked } from "marked";
 import {ref, defineEmits, watch} from 'vue'
 import { OnClickOutside } from '@vueuse/components'

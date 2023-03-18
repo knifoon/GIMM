@@ -39,9 +39,9 @@ const getGimi = (f) => {
     let charIgnore = ['CharacterShaders','undefined']
     const removeFromList = () =>{
       Object.keys(characterMods).forEach(n=>{
-        if(n.toLowerCase().endsWith('mod')){
-          characterMods[n.substring(0,n.length-3)] = characterMods[n]
-          delete characterMods[n]
+        if(n.toLowerCase().endsWith('mod') && n.toLowerCase() !== 'lsmod'){
+            characterMods[n.substring(0,n.length-3)] = characterMods[n]
+            delete characterMods[n]
         }
         if( n.startsWith('DISABLED')) {
           //clear white space goota
