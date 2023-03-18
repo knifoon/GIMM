@@ -5,6 +5,7 @@ import Setup from './components/Setup.vue'
 import { getMods } from "@/assets/getMods.js"
 import { getGimi } from "@/assets/getGimi.js"
 import log from 'electron-log/renderer';
+import Modal from './components/Modal.vue'
 
 log.info('Log from the renderer process');
 const {ipcRenderer} = require('electron')
@@ -63,8 +64,11 @@ const resetFolders = () => {
 
 let showSetup = ref(true)
 if(settings.get('gimiFolder') && settings.get('modFolder')) showSetup.value=false
+let modal = ref(false)
 </script>
+
 <template>
+  <Modal v-if="modal">test</Modal>
   <Transition>
     <div class="starmap" v-if="showSetup">
       <div id="stars"></div>
@@ -86,8 +90,8 @@ if(settings.get('gimiFolder') && settings.get('modFolder')) showSetup.value=fals
   </div>
 </div>
 <footer v-show="!showSetup">
-  <button @click="resetFolders">Reset Folders</button>
-  work in progress</footer>
+  work in progress --  by <a href="http://twitter.com/knifoon">Knifoon</a>
+  </footer>
 </template>
 
 <style scoped>

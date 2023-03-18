@@ -2,6 +2,7 @@
 import { objectExpression } from "@babel/types";
 import { marked } from "marked";
 import {ref, defineEmits, watch} from 'vue'
+import { OnClickOutside } from '@vueuse/components'
 
 const emit = defineEmits(['updateGimi'])
 const props = defineProps(['mods','characterName','activeMods'])
@@ -17,11 +18,6 @@ const renderRM = (file) => marked.parse(readFileSync(file,'utf-8'));
 let activeRM = ref('none')
 let activeVariants = ref({})
 let rmToggle = (rm,variant = null) => {
-  // if (variant){
-  //   if(activeVariant.value == variant) activeVariant.value = 'none'
-  //   else activeVariant.value =  variant
-  // } else activeVariant.value = 'none'
-  // if (activeRM.value == rm && activeVariant.value == 'none') activeRM.value = 'none'
   if (activeRM.value == rm ) activeRM.value = 'none'
   else activeRM.value = rm
 }
@@ -100,9 +96,8 @@ watch(() => props.mods, (newValue) => {
   if(activeDrop.value == col) activeDrop.value = null;
   else activeDrop.value = col
  }
- let changeVariant = () => {
-
-
+ let dropdownHandle = () => {
+  if(activeDrop) activeDrop.value = null
  }
 </script>
 
@@ -118,9 +113,11 @@ watch(() => props.mods, (newValue) => {
         <span class="collection-name">{{ item.name }}</span>
         <button @click="showVariants(item.name)" class="dd-button"></button>
         <!-- variant select -->
-        <ul v-if="activeDrop == item.name" class="var-dropdown">
-          <li v-for="variant in item.collection" @click="activeVariants[item.name] = variant.name , activeDrop = null">{{ variant.name }}</li>
-        </ul>
+        <OnClickOutside @trigger="dropdownHandle">
+          <ul v-if="activeDrop == item.name" class="var-dropdown" >
+            <li v-for="variant in item.collection" @click="activeVariants[item.name] = variant.name , activeDrop = null">{{ variant.name }}</li>
+          </ul>
+        </OnClickOutside>
         <div v-for="(variant, index) in item.collection">
           <div v-if="activeVariants[item.name] == variant.name" class="mod-info">
             <span class="mod-name">{{ variant.name }}</span>
