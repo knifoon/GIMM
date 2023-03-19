@@ -34,8 +34,9 @@ const save = () => {
     <div class="container">
         <div class="meta">
             <h1>Editing Mod for {{ gimm.character || modInfo.character }}</h1>
-            <div> Location: <span class="path">{{ modInfo.path }}</span></div>
-            <div> ReadMe: <span class="path">{{ modInfo.readme }}</span></div>
+            <div> Location: <span class="path">{{ modInfo.path.replaceAll('/','\\') }}</span></div>
+            <div v-if="modInfo.readme"> ReadMe: <span class="path">{{ modInfo.readme }}</span></div>
+            <div v-else>No ReadMe File Found</div>
         </div>
         <br>
         <Form type="text" label="name" v-model:data="gimm.name"/>
