@@ -157,7 +157,7 @@ app.on("open-url", async (event, url) => {
 
 //right click
 ipcMain.on('show-context-menu', (event,args) => {
-  console.log(JSON.parse(args));
+  console.log(JSON.parse(args).path.replaceAll('/', '\\'));
   const template = [
     {
       label: 'Edit Info',
@@ -166,7 +166,7 @@ ipcMain.on('show-context-menu', (event,args) => {
     {
       label: 'Show in Folder',
       click: () => {
-        shell.showItemInFolder(JSON.parse(args).path)
+        shell.showItemInFolder(JSON.parse(args).path.replaceAll('/', '\\'))
       }
     },
   ]

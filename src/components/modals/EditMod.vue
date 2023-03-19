@@ -20,8 +20,12 @@ if(gimmFile){
     gimm = ref({"name":modInfo.name,"character":modInfo.character,"locked":false})
 }
 const save = () => {
+    console.log('from edit screen');
+    let getOriginalName = modInfo.path.split('/')
+    // getOriginalName = getOriginalName
+    let originalName = getOriginalName[getOriginalName.length - 1]
+    if(gimm.value.name == "") gimm.value.name = originalName
     writeFileSync(`${modInfo.path}/GIMM.jsonc`, JSON.stringify(gimm.value))
-
     instance.parent.emit('reloadList',gimm.character)
     instance.parent.emit('closeModal')
 }
