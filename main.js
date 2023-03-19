@@ -162,7 +162,13 @@ ipcMain.on('show-context-menu', (event,args) => {
     {
       label: 'Edit Info',
       click: () => { event.sender.send('edit-mod', args) }
-    }
+    },
+    {
+      label: 'Show in Folder',
+      click: () => {
+        shell.showItemInFolder(JSON.parse(args).path)
+      }
+    },
   ]
   const menu = Menu.buildFromTemplate(template)
   menu.popup(BrowserWindow.fromWebContents(event.sender))
