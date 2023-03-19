@@ -73,14 +73,19 @@ const getMods = (f) => {
     const removeFromList = () =>{
       Object.keys(modList).forEach(n=>{
         if(n.toLowerCase().endsWith('mod')){
-          // if (modList[n.substring(0,n.length-3)]) {
           //ignore LSMods
-          if (n.toLowerCase() != 'lsmod' ){
+          if (modList[n.substring(0,n.length-3)]){
+            modList[n].forEach(nm => {
+              nm.character = n.substring(0,n.length-3)
+              modList[n.substring(0,n.length-3)].push(nm)
+            })
+            delete modList[n]
+          } 
+          else if(n.toLowerCase() != 'lsmod' ){
             modList[n].forEach(nm => {
               console.log(nm);
               console.log(modList[n]);
               nm.character = n.substring(0,n.length-3)
-              if(modList[n.substring(0,n.length-3)]) modList[n.substring(0,n.length-3)].push(nm)
               modList[n.substring(0,n.length-3)]= [nm]
             })
             delete modList[n]
