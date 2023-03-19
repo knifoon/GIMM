@@ -22,28 +22,18 @@ window.addEventListener('contextmenu', (e) => {
     let out;
     //check if variant
     if (sortedMods.value.find(m => m.name == modName)) {
-      out = sortedMods.value.filter(m => m.name == modName)
-      console.log(out);
+      out = sortedMods.value.filter(m => m.name == modName)[0]
     } else {
       let collectionName = e.target.closest('.mod-collection').querySelector('.collection-name').innerText
       let ctest = sortedMods.value.filter(m => m.name == collectionName)[0]
-      console.log(ctest)
       ctest.collection.forEach(m => {
         if(m.name == modName){
           out = m
         }
       })
-      console.log(out);
     }
-    let currentMod = JSON.stringify(out)
-    console.log(currentMod);
-    ipcRenderer.send('show-context-menu',currentMod)
+    ipcRenderer.send('show-context-menu',JSON.stringify(out))
   }
-})
-
-ipcRenderer.on('context-menu-command', (e, command) => {
-  // ...
-  console.log(e);
 })
 //
 

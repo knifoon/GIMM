@@ -1,5 +1,7 @@
 <script setup>
+import EditMod from './modals/EditMod.vue'
 
+const props = defineProps(['content'])
 </script>
 <template>
     <div class="modal">
@@ -14,7 +16,15 @@
     </div>
     <div class="wrap">
         <div class="content">
-            <slot></slot>
+          <header>
+            <button @click="$emit('closeModal')">
+            {{'<back'}}
+            </button>
+          </header>
+          <div v-if="props.content">
+            <EditMod :json="props.content.editMod" v-if="props.content.editMod"></EditMod>
+          </div>
+          <slot v-else></slot>
         </div>
     </div>
     </div>

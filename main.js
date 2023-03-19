@@ -157,11 +157,11 @@ app.on("open-url", async (event, url) => {
 
 //right click
 ipcMain.on('show-context-menu', (event,args) => {
-  console.log(args);
+  console.log(JSON.parse(args));
   const template = [
     {
       label: 'Edit Info',
-      click: () => { event.sender.send('context-menu-command', 'edit') }
+      click: () => { event.sender.send('edit-mod', args) }
     }
   ]
   const menu = Menu.buildFromTemplate(template)

@@ -47,6 +47,13 @@ ipcRenderer.on("handle-deep-link",link => {
 ipcRenderer.on("resetFolders",link => {
   resetFolders()
 })
+ipcRenderer.on('edit-mod', (e, modJson) => {
+  // console.log(modJson);
+  modalContent.value = {"editMod" : modJson}
+  modal.value =  true;
+
+})
+
 const changeContent = (con,char) => {
   if(settings.get('gimiFolder')){
     currentContent.value = con
@@ -65,10 +72,12 @@ const resetFolders = () => {
 let showSetup = ref(true)
 if(settings.get('gimiFolder') && settings.get('modFolder')) showSetup.value=false
 let modal = ref(false)
+let modalContent = ref(null)
+
 </script>
 
 <template>
-  <Modal v-if="modal">test</Modal>
+  <Modal v-if="modal" :content="modalContent" @closeModal="modal = false"></Modal>
   <Transition>
     <div class="starmap" v-if="showSetup">
       <div id="stars"></div>

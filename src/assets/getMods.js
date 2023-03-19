@@ -42,8 +42,9 @@ const getMods = (f) => {
           })
         }
         // Add to list of mods
-        if(readdirSync(modInfo.modFolderPath).find(file => file == 'GIMM.jsonc')){
-          modInfo.gimm = readFileSync(`${modInfo.modFolderPath}/GIMM.jsonc`,'utf8')
+        if(readdirSync(modInfo.modFolderPath).find(file => file.startsWith('GIMM.json'))){
+          let gimmFile = readdirSync(modInfo.modFolderPath).find(file => file.startsWith('GIMM.json'))
+          modInfo.gimm = readFileSync(`${modInfo.modFolderPath}/${gimmFile}`,'utf8')
         }
         // Use GIMM.jsonc
         let modInfoOut = {
