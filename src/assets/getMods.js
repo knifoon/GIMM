@@ -67,16 +67,21 @@ const getMods = (f) => {
         modList[modInfo.character].push(modInfoOut)
       }
     });
-    // ModList Filters
+    // ModList Filters 
     // "characters to ignore
     let charIgnore = ['CharacterShaders', 'undefined']
     const removeFromList = () =>{
       Object.keys(modList).forEach(n=>{
         if(n.toLowerCase().endsWith('mod')){
-          if (modList[n.substring(0,n.length-3)]) {
+          // if (modList[n.substring(0,n.length-3)]) {
+          //ignore LSMods
+          if (n.toLowerCase() != 'lsmod' ){
             modList[n].forEach(nm => {
+              console.log(nm);
+              console.log(modList[n]);
               nm.character = n.substring(0,n.length-3)
-              modList[n.substring(0,n.length-3)].push(nm)
+              if(modList[n.substring(0,n.length-3)]) modList[n.substring(0,n.length-3)].push(nm)
+              modList[n.substring(0,n.length-3)]= [nm]
             })
             delete modList[n]
           }
