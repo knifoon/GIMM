@@ -14,19 +14,18 @@ const Store = require('electron-store');
 const settings = new Store();
 
 
-let showList = ref(false)
 let GBLink = ref(false)
 let modList = {}
 let currentContent = ref(null)
 let currentCharacter = ref(null)
 
-let listRender = (f) =>{let unsorted = getMods(f)
+let listRender = (f) =>{
+  let unsorted = getMods(f)
   modList = Object.keys(unsorted).sort().reduce((m,name) => ({ ...m, [name]: unsorted[name]}), {});
-  showList.value = true}
+}
 let activeMods = ref(null)
 let updateGimi = () => {
   activeMods.value = getGimi(settings.get('gimiFolder'))
-  console.log(activeMods);
 }
 if(settings.get('modFolder')) listRender(settings.get('modFolder'))
 if(settings.get('gimiFolder')) updateGimi()
@@ -64,9 +63,9 @@ const changeContent = (con,char) => {
 const resetFolders = () => {
   settings.delete('gimiFolder')
   settings.delete('modFolder')
-  showList.value = false;
   showSetup.value = true;
   currentContent.value = null;
+  currentCharacter.value = null;
 }
 
 let showSetup = ref(true)
@@ -74,10 +73,16 @@ if(settings.get('gimiFolder') && settings.get('modFolder')) showSetup.value=fals
 let modal = ref(false)
 let modalContent = ref(null)
 
+const reloader = () => {
+  listRender(settings.get('modFolder'))
+  currentContent.value = modList[currentCharacter.value]
+  updateGimi();
+}
+
 </script>
 
 <template>
-  <Modal v-if="modal" :content="modalContent" @closeModal="modal = false"></Modal>
+  <Modal v-if="modal" :content="modalContent" @closeModal="modal = false" @reloadList="reloader()"/>
   <Transition>
     <div class="starmap" v-if="showSetup">
       <div id="stars"></div>
@@ -86,12 +91,14 @@ let modalContent = ref(null)
     </div>  
   </Transition>
 
-<div class="content-head" v-show="!showSetup"><h2>Information</h2></div>
+<div class="content-head" v-show="!showSetup">
+  <h2>Information</h2>
+</div>
 <div class="list-head" v-show="!showSetup"><h2>Mod List</h2></div>
   <Setup v-if="showSetup"/>
-<Content v-if="!showSetup" :mods="currentContent" :characterName="currentCharacter" :activeMods="activeMods" v-on:updateGimi="updateGimi"></Content>
+<Content v-if="!showSetup" :key="reloader" :mods="currentContent" :characterName="currentCharacter" :activeMods="activeMods" v-on:updateGimi="updateGimi"></Content>
 <div v-if="!showSetup" class="character-list">
-  <div v-if="showList">
+  <div>
     <li v-for="(mods, charName) in modList" @click="changeContent(mods,charName)"
     :class="{active: charName == currentCharacter}">
       {{ charName }} ({{ mods.length }})

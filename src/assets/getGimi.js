@@ -2,7 +2,6 @@ const {readdirSync} = require('fs')
 
 const getGimi = (f) => {
     let characterMods = {};
-    console.log('GIMI Folder:',f);
     readdirSync(f,{withFileTypes: true}).forEach((mod)=>{
       if(mod.isDirectory()) {
         let modInfo = {
@@ -48,14 +47,11 @@ const getGimi = (f) => {
           let getName = n.substring(8,n.length).replace(/\s/g,'')
           let fLet = getName.charAt(0).toUpperCase()
           getName = fLet + getName.slice(1)
-          console.log('gimi res');
-          console.log(characterMods[getName]);
           characterMods[getName] = characterMods[n]
         } 
       })
     }
     removeFromList()
-    console.log(characterMods)
     return characterMods
   }
 export {getGimi}

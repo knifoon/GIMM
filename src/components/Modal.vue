@@ -1,6 +1,8 @@
 <script setup>
 import EditMod from './modals/EditMod.vue'
 
+defineEmits(['closeModal','reloadList'])
+
 const props = defineProps(['content'])
 </script>
 <template>

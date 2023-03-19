@@ -97,7 +97,6 @@ const getMods = (f) => {
       })
     }
     removeFromList()
-    console.log(Object.keys(modList))
     return modList
   }
 export {getMods}

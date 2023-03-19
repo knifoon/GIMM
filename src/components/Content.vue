@@ -100,17 +100,20 @@ let sortMods = (m) => {
 }
 watch(() => props.mods, (newValue) => {
   sortMods(newValue)
-  console.log(sortedMods.value);
   sortedMods.value.forEach(listItem =>{
     if (listItem.collection) {
       listItem.collection.forEach(variant => {
+        //checks if variant is active mod, if so shows it
         if (compareMods(variant.path)) activeVariants.value[listItem.name] = variant.name
       })
+      //otherwise shows first mod in collection array
       if (!activeVariants.value[listItem.name]) activeVariants.value[listItem.name] = listItem.collection[0].name
-
+      //update when removed from collection
+      if(!listItem.collection.find(n => n.name == activeVariants.value[listItem.name])){
+        activeVariants.value[listItem.name] = listItem.collection[0].name
+      }
     }
   })
-
  });
    
  let activeDrop = ref(null)
@@ -140,7 +143,7 @@ watch(() => props.mods, (newValue) => {
             <li v-for="variant in item.collection" @click="activeVariants[item.name] = variant.name , activeDrop = null">{{ variant.name }}</li>
           </ul>
         </OnClickOutside>
-        <div v-for="(variant, index) in item.collection">
+        <div v-for="variant in item.collection">
           <div v-if="activeVariants[item.name] == variant.name" class="mod-info">
             <span class="mod-name">{{ variant.name }}</span>
             <button v-if="variant.readme" @click="item.readme = variant.readme ,rmToggle(item.name)" class="rm-toggle"><img src="/images/info.svg" title="readme"></button>
