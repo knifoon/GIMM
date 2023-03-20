@@ -124,16 +124,28 @@ watch(() => props.mods, (newValue) => {
  let dropdownHandle = () => {
   if(activeDrop) activeDrop.value = null
  }
+ let exists = (q) => {
+  if(q) return true
+ }
 </script>
 
 <template>
   <div class="content">
     <div v-if="props.mods">
       <header>
-        <div>{{ props.characterName }}</div>
+        <div>
+          <div>
+            {{ props.characterName }}
+          </div>
+          <!-- sub titles for certain items -->
+        <sub v-if="props.characterName == `Royal & Sacrificial Swords`">
+        Royal Longsword & Sacrificial Sword share a model that can conflict with each other, you can only modify one at a time
+        </sub>
+        </div>
+        <!-- end subs -->
         <button class="disable" v-if="props.activeMods[props.characterName]" @click="rmMod">Disable</button>
       </header>
-    <li class="mod-li" v-for="item in sortedMods">
+    <li class="mod-li" v-for="item in sortedMods" :class="{collection: item.collection}">
       <div class="mod-collection" v-if="item.collection">
         <span class="collection-name">{{ item.name }}</span>
         <button @click="showVariants(item.name)" class="dd-button"></button>
@@ -195,6 +207,10 @@ header div {
   font-size: 24px;
   font-weight: bold;
   color: #fff;
+}
+header sub {
+  font-size: 12px;
+  display: inherit;
 }
 .mod-li:last-child div:first-child{
 border-bottom: solid 1px var(--color-border);
@@ -302,6 +318,11 @@ border-bottom: solid 1px var(--color-border);
 .var-dropdown li {
   cursor: pointer;
   padding: 5px;
+}
+.collection ~ .collection::before {
+    content: '';
+    display: block;
+    border: solid 1px var(--color-border);
 }
 </style>
 

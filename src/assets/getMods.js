@@ -72,8 +72,8 @@ const getMods = (f) => {
     let charIgnore = ['CharacterShaders', 'undefined']
     const removeFromList = () =>{
       Object.keys(modList).forEach(n=>{
+        // deal with 'mod.ini" files
         if(n.toLowerCase().endsWith('mod')){
-          //ignore LSMods
           if (modList[n.substring(0,n.length-3)]){
             modList[n].forEach(nm => {
               nm.character = n.substring(0,n.length-3)
@@ -81,15 +81,23 @@ const getMods = (f) => {
             })
             delete modList[n]
           } 
+          //ignore LSMods
           else if(n.toLowerCase() != 'lsmod' ){
             modList[n].forEach(nm => {
-              console.log(nm);
-              console.log(modList[n]);
               nm.character = n.substring(0,n.length-3)
               modList[n.substring(0,n.length-3)]= [nm]
             })
             delete modList[n]
           }
+        }
+        // combine royal longsword and Sacrifical sword
+        // they share a hash that conflicts
+        if(n.toLowerCase() == 'sacrificialsword' || n.toLowerCase() == 'royallongsword'){
+          if(!modList['Royal & Sacrificial Swords']) modList['Royal & Sacrificial Swords'] = []
+          modList[n].forEach(nm => {
+            modList['Royal & Sacrificial Swords'].push(nm)
+          })
+          delete modList[n]
         }
         if(charIgnore.indexOf(n) >= 0 ) delete modList[n]
         if( n.startsWith('DISABLED')) {

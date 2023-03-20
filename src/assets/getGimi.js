@@ -37,21 +37,31 @@ const getGimi = (f) => {
     // adjust list
     let charIgnore = ['CharacterShaders','undefined']
     const removeFromList = () =>{
+      // mod.inis
       Object.keys(characterMods).forEach(n=>{
         if(n.toLowerCase().endsWith('mod') && n.toLowerCase() !== 'lsmod'){
             characterMods[n.substring(0,n.length-3)] = characterMods[n]
             delete characterMods[n]
         }
         if( n.startsWith('DISABLED')) {
-          //clear white space goota
           let getName = n.substring(8,n.length).replace(/\s/g,'')
           let fLet = getName.charAt(0).toUpperCase()
           getName = fLet + getName.slice(1)
           characterMods[getName] = characterMods[n]
         } 
+        // sacrificial/royal swords
+        if(n.toLowerCase() == 'sacrificialsword' || n.toLowerCase() == 'royallongsword'){
+          if(!characterMods['Royal & Sacrificial Swords']) characterMods['Royal & Sacrificial Swords'] = []
+          characterMods[n].forEach(nm => {
+            characterMods['Royal & Sacrificial Swords'] = [nm]
+          })
+          delete characterMods[n]
+        }
       })
     }
     removeFromList()
+    console.log('gimi mods');
+    console.log(characterMods);
     return characterMods
   }
 export {getGimi}

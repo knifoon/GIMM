@@ -86,7 +86,9 @@ const reloader = () => {
 </script>
 
 <template>
-  <Modal v-if="modal" :content="modalContent" @closeModal="modal = false" @reloadList="reloader()"/>
+  <Transition name="fast">
+    <Modal v-if="modal" :content="modalContent" @closeModal="modal = false" @reloadList="reloader()"/>
+  </Transition>
   <Transition>
     <div class="starmap" v-if="showSetup">
       <div id="stars"></div>
