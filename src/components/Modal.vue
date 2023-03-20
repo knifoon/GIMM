@@ -46,8 +46,8 @@ const props = defineProps(['content'])
     z-index: 110;
 }
 .content {
-    margin: auto;
-    width: 80%;
+  margin: 8% auto 0;
+  width: 80%;
 }
 .starmap {
     position: absolute;
@@ -82,5 +82,8 @@ const props = defineProps(['content'])
     animation: rotate linear 50s infinite forwards;
     mix-blend-mode: screen;
     filter: hue-rotate(63deg);
+}
+button {
+    font-weight: bold;
 }
 </style>

@@ -43,3 +43,22 @@ a {
 .fast-leave-to {
   opacity: 0;
 }
+button {
+  cursor: pointer;
+  background: #333035;
+  color: var(--vt-c-white-mute);
+  padding: 10px;
+  border: none;
+  border-radius: 3px;
+}
+button:hover {
+  background: #413E44;
+}
+input[type="text"] {
+  background: #413e44;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  color: #181818;
+  font-weight: bold;
+}

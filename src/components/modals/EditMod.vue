@@ -43,7 +43,7 @@ const save = () => {
         <Form type="text" label="version" v-model:data="gimm.version"/>
         <Form type="text" label="collection" v-model:data="gimm.collection"/>
         <Form type="text" label="author" v-model:data="gimm.author"/>
-        <button @click="save">save changes</button>
+        <button @click="save">Save Changes</button>
     </div>
 </template>
 <style scoped>
@@ -56,5 +56,8 @@ const save = () => {
 .path {
     white-space: nowrap;
 
+}
+button {
+    font-weight: bold;
 }
 </style>
