@@ -15,28 +15,28 @@ const getMods = (f) => {
         //Identify Mod folder
         let iniFile = readdirSync(modInfo.path).find(file => file.endsWith('.ini')) || null;
         if(iniFile) {
-          modInfo.character = iniFile.substring(0,iniFile.length-4)
+          modInfo.character = iniFile.substring(0,iniFile.length-4).toLowerCase()
         } else {
           //check inner folders
           readdirSync(modInfo.path,{withFileTypes: true})
           .every(dirent => {
           if(dirent.isDirectory()) iniFile = readdirSync(`${modInfo.path}/${dirent.name}`).find(file => file.endsWith('.ini')) || null;
           if(iniFile) {
-            modInfo.character = iniFile.substring(0,iniFile.length-4)
+            modInfo.character = iniFile.substring(0,iniFile.length-4).toLowerCase()
             modInfo.modFolderPath = `${modInfo.path}/${dirent.name}`;
             return false
           } else return true
           })
         }
         //get character name from toggle mods
-        if(modInfo.character == "merged"){
+        if(modInfo.character.includes("merged") || modInfo.character.includes("swap")){
           readdirSync(modInfo.modFolderPath,{withFileTypes: true})
           .filter(dirent => dirent.isDirectory())
           .map(dirent => dirent.name)
           .every(dirent => {
             let findINI = readdirSync(`${modInfo.modFolderPath}/${dirent}`).find(file => file.endsWith('.ini')) || null;
             if(findINI) {
-              modInfo.character = findINI.substring(8,findINI.length-4)
+              modInfo.character = findINI.substring(8,findINI.length-4).toLowerCase()
               return false
             } else return true
           })
@@ -60,7 +60,7 @@ const getMods = (f) => {
           }
           modInfo.gimm = stripJSONComments(modInfo.gimm)
           let gimm = JSON.parse(modInfo.gimm)
-          modInfoOut.character = gimm.character;
+          // modInfoOut.character = gimm.character.toLowerCase();
           modInfoOut.gimm = gimm
         }
         if(!modList[modInfoOut.character]) modList[modInfoOut.character] = []
@@ -69,9 +69,10 @@ const getMods = (f) => {
     });
     // ModList Filters 
     // "characters to ignore
-    let charIgnore = ['CharacterShaders', 'undefined']
+    let charIgnore = ['charactershaders', 'undefined']
     const removeFromList = () =>{
       Object.keys(modList).forEach(n=>{
+
         // deal with 'mod.ini" files
         if(n.toLowerCase().endsWith('mod')){
           if (modList[n.substring(0,n.length-3)]){
@@ -100,7 +101,7 @@ const getMods = (f) => {
           delete modList[n]
         }
         if(charIgnore.indexOf(n) >= 0 ) delete modList[n]
-        if( n.startsWith('DISABLED')) {
+        if( n.toLowerCase().startsWith('disabled')) {
           // sort mods with disabled ini files
           let getName = n.substring(8,n.length).replace(/\s/g,'')
           let fLet = getName.charAt(0).toUpperCase()
@@ -111,10 +112,19 @@ const getMods = (f) => {
             })
             delete modList[n]
           }
-        } 
+        }
       })
     }
     removeFromList()
-    return modList
+    // capitalize / rename
+    let finalList = {}
+    Object.keys(modList).forEach(n => {
+      let nn;
+      nn = n == 'raidenshogun'? 'Raiden Shogun' : n
+      finalList[nn.charAt(0).toUpperCase() + nn.slice(1)] = modList[n]
+    })
+    console.log('getMods')
+    console.log(finalList)
+    return finalList
   }
 export {getMods}

@@ -12,7 +12,7 @@ const getGimi = (f) => {
         //find ini
         let iniFile = readdirSync(modInfo.path).find(file => file.endsWith('.ini')) || null;
         if(iniFile) {
-          modInfo.character = iniFile.substring(0,iniFile.length-4)
+          modInfo.character = iniFile.substring(0,iniFile.length-4).toLowerCase()
         }
         //get character name from toggle mods
         if(modInfo.character == "merged"){
@@ -22,7 +22,7 @@ const getGimi = (f) => {
           .every(dirent => {
             let findINI = readdirSync(`${modInfo.modFolderPath}/${dirent}`).find(file => file.endsWith('.ini')) || null;
             if(findINI) {
-              modInfo.character = findINI.substring(8,findINI.length-4)
+              modInfo.character = findINI.substring(8,findINI.length-4).toLowerCase()
               return false
             } else return true
           })
@@ -43,7 +43,7 @@ const getGimi = (f) => {
             characterMods[n.substring(0,n.length-3)] = characterMods[n]
             delete characterMods[n]
         }
-        if( n.startsWith('DISABLED')) {
+        if( n.toLowerCase().startsWith('disabled')) {
           let getName = n.substring(8,n.length).replace(/\s/g,'')
           let fLet = getName.charAt(0).toUpperCase()
           getName = fLet + getName.slice(1)
@@ -60,8 +60,14 @@ const getGimi = (f) => {
       })
     }
     removeFromList()
+    
+    let finalList = {}
+    Object.keys(characterMods).forEach(n => {
+      let nn = n == 'raidenshogun'? 'Raiden Shogun' : n
+      finalList[nn.charAt(0).toUpperCase() + nn.slice(1)] = characterMods[n]
+    })
     console.log('gimi mods');
-    console.log(characterMods);
-    return characterMods
+    console.log(finalList);
+    return finalList
   }
 export {getGimi}
