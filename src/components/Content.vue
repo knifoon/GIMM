@@ -141,6 +141,9 @@ watch(() => props.mods, (newValue) => {
         <sub v-if="props.characterName == `Royal & Sacrificial Swords`">
         Royal Longsword & Sacrificial Sword share a model that can conflict with each other, you can only modify one at a time
         </sub>
+        <sub v-if="props.characterName == `Other`">
+        These are folders within your mod collection that dont use common folder structures and may need to be configured manually.
+        </sub>
         </div>
         <!-- end subs -->
         <button class="disable" v-if="props.activeMods[props.characterName]" @click="rmMod">Disable</button>
@@ -168,7 +171,8 @@ watch(() => props.mods, (newValue) => {
       <div class="mod-info" v-else>
         <span class="mod-name">{{ item.name }}</span>
         <button v-if="item.readme" @click="rmToggle(item.name)" class="rm-toggle"><img src="/images/info.svg" title="readme"></button>
-        <button class="toggle" v-if="!compareMods(item.path)" @click="swapMods(item.path)">Enable</button>
+        <button class="toggle" v-if="!compareMods(item.path) && props.characterName != `Other`" @click="swapMods(item.path)">Enable</button>
+        <span v-else-if="props.characterName == `Other`" class="other">Not Supported</span>
         <span v-else class="active-mod">Active</span>
       </div>
       <div class="readme" v-if="activeRM == item.name" v-html="renderRM(item.readme)"></div>
@@ -241,7 +245,7 @@ border-bottom: solid 1px var(--color-border);
   padding: 0.5rem ;
   margin-bottom: 0.5rem;
 }
-.active-mod , .toggle , .disable{
+.active-mod , .toggle , .disable , .other{
   cursor: pointer;
   border: none;
   border-radius: 3px;
@@ -264,10 +268,16 @@ border-bottom: solid 1px var(--color-border);
   cursor: pointer;
   margin: 0 10px;
   height: 34px;
+  width: 24px;
   border: none;
   background: none;
   filter: invert(1);
   opacity: 50%;
+}
+.rm-toggle img {
+  position: absolute;
+  top: 5px;
+  left: 0px;
 }
 .active-mod {
   background: #47745c;

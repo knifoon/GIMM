@@ -2,6 +2,7 @@ const {readFileSync, readdirSync} = require('fs')
 
 const getMods = (f) => {
     let modList = {};
+    let undefinedFolders = []
     readdirSync(f,{withFileTypes: true}).forEach((mod)=>{
       if(mod.isDirectory()) {
         let modInfo = {
@@ -27,6 +28,9 @@ const getMods = (f) => {
             return false
           } else return true
           })
+        }
+        if (!modInfo.character) {
+          modInfo.character = "other"
         }
         //get character name from toggle mods
         if(modInfo.character.includes("merged") || modInfo.character.includes("swap")){
@@ -69,7 +73,7 @@ const getMods = (f) => {
     });
     // ModList Filters 
     // "characters to ignore
-    let charIgnore = ['charactershaders', 'undefined']
+    let charIgnore = ['charactershaders']
     const removeFromList = () =>{
       Object.keys(modList).forEach(n=>{
 
@@ -101,11 +105,11 @@ const getMods = (f) => {
           delete modList[n]
         }
         if(charIgnore.indexOf(n) >= 0 ) delete modList[n]
+        // sort mods with disabled ini files
         if( n.toLowerCase().startsWith('disabled')) {
-          // sort mods with disabled ini files
+          console.log(n);
           let getName = n.substring(8,n.length).replace(/\s/g,'')
-          let fLet = getName.charAt(0).toUpperCase()
-          getName = fLet + getName.slice(1)
+          console.log(getName);
           if (modList[getName]) {
             modList[n].forEach(nm => {
               modList[getName].push(nm)
