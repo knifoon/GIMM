@@ -21,15 +21,14 @@ let currentCharacter = ref(null)
 
 let listRender = (f) =>{
   let unsorted = getMods(f)
+  let other = unsorted.Other
+  delete unsorted.Other
   modList = Object.keys(unsorted).sort().reduce((m,name) => ({ ...m, [name]: unsorted[name]}), {});
-  console.log('Mod Folder');
-  console.log(modList);
+  modList.Other = other
 }
 let activeMods = ref(null)
 let updateGimi = () => {
   activeMods.value = getGimi(settings.get('gimiFolder'))
-  console.log('Gimi Folder');
-  console.log(activeMods)
 }
 if(settings.get('modFolder')) listRender(settings.get('modFolder'))
 if(settings.get('gimiFolder')) updateGimi()

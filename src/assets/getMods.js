@@ -107,9 +107,9 @@ const getMods = (f) => {
         if(charIgnore.indexOf(n) >= 0 ) delete modList[n]
         // sort mods with disabled ini files
         if( n.toLowerCase().startsWith('disabled')) {
-          console.log(n);
+          // console.log(n);
           let getName = n.substring(8,n.length).replace(/\s/g,'')
-          console.log(getName);
+          // console.log(getName);
           if (modList[getName]) {
             modList[n].forEach(nm => {
               modList[getName].push(nm)
@@ -123,12 +123,32 @@ const getMods = (f) => {
     // capitalize / rename
     let finalList = {}
     Object.keys(modList).forEach(n => {
-      let nn;
-      nn = n == 'raidenshogun'? 'Raiden Shogun' : n
+      const nameSwapper = (nc) => {
+        let nameSwaps = {
+          "raidenshogun": "Raiden Shogun",
+          "lsmod": "LSMod",
+          "barbarasummertime": "Barbara - Summer Time"
+        }
+        let newName,ran = false
+        Object.keys(nameSwaps).forEach(swap => {
+          if(!ran){
+            if(nc == swap) {
+              newName = nameSwaps[swap]
+              ran = true
+            } else newName = nc
+          }
+        })
+        return newName
+      }
+      let nn = nameSwapper(n)
+      // let nn
+      // nn = n == 'raidenshogun'? 'Raiden Shogun' : n
+      // nn = n == 'barbarasummertime' ? 'Barbara - Summer Time'
+      // console.log(nn);
       finalList[nn.charAt(0).toUpperCase() + nn.slice(1)] = modList[n]
     })
-    console.log('getMods')
-    console.log(finalList)
+    // console.log('getMods')
+    // console.log(finalList)
     return finalList
   }
 export {getMods}

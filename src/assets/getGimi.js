@@ -45,8 +45,7 @@ const getGimi = (f) => {
         }
         if( n.toLowerCase().startsWith('disabled')) {
           let getName = n.substring(8,n.length).replace(/\s/g,'')
-          let fLet = getName.charAt(0).toUpperCase()
-          getName = fLet + getName.slice(1)
+          console.log(getName);
           characterMods[getName] = characterMods[n]
         } 
         // sacrificial/royal swords
@@ -63,11 +62,28 @@ const getGimi = (f) => {
     
     let finalList = {}
     Object.keys(characterMods).forEach(n => {
-      let nn = n == 'raidenshogun'? 'Raiden Shogun' : n
+      const nameSwapper = (nc) => {
+        let nameSwaps = {
+          "raidenshogun": "Raiden Shogun",
+          "lsmod": "LSMod",
+          "barbarasummertime": "Barbara - Summer Time"
+        }
+        let newName,ran = false
+        Object.keys(nameSwaps).forEach(swap => {
+          if(!ran){
+            if(nc == swap) {
+              newName = nameSwaps[swap]
+              ran = true
+            } else newName = nc
+          }
+        })
+        return newName
+      }
+      let nn = nameSwapper(n)
       finalList[nn.charAt(0).toUpperCase() + nn.slice(1)] = characterMods[n]
     })
-    console.log('gimi mods');
-    console.log(finalList);
+    // console.log('gimi mods');
+    // console.log(finalList);
     return finalList
   }
 export {getGimi}

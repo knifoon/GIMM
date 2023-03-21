@@ -187,12 +187,17 @@ watch(() => props.mods, (newValue) => {
           The goal of this project is to easily manage character skins in <a href="https://github.com/SilentNightSound/GI-Model-Importer">[GIMI]</a>
           <br>
           <br>
-          Both folders you've added should be different. If you've made a mistake, you can reset the folders by clicking the button on the bottom right.
+          The Help menu lets you reset your folder selection
           <br>
           <br>
           If you have any issues, check out the <a href="http://gamebanana.com/tools/12471">gamebanana page</a>
         </p>
-        <span class="highlight">Please make sure all the mods you currently have inside GIMI are also in your mod folder, this tool will delete folders from the gimi mod folder when setting new mods to active</span>
+        <span class="highlight">- Please make sure all the mods you currently have inside GIMI are also in your mod folder,
+           this tool will delete folders from the gimi mod folder when setting new mods to active
+          <br>
+          <br>
+          - Changes you make to the files outside of GIMM wont be reflected until you refresh the app (CTRL-R)  
+        </span>
       </div>
 
       <div v-if="settings.get('gimiFolder')"> Current GIMI folder: {{ settings.get('gimiFolder') }}</div>
