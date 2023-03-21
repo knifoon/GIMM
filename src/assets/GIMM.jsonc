@@ -1,0 +1,11 @@
+{
+// The structure of this file might change later, any older files will be converted automaticly if needed.
+       "character":"Eula",
+           "name" : "Awesome Eula Mod",
+         "author" : "knifoon",
+        "version" : "1",
+// Mods in the same collection will be grouped when under the same character
+    "collection"  : "My Series",
+// Not yet implemented, but will protect the mod info from being overwriten through the GIMM app
+         "locked" : false
+}
