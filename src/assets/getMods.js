@@ -43,6 +43,7 @@ const getMods = (f) => {
           .every(dirent => {
             let findINI = readdirSync(`${modInfo.modFolderPath}/${dirent}`).find(file => file.endsWith('.ini')) || null;
             if(findINI) {
+              if(findINI.includes('icon')) return true
               modInfo.character = findINI.substring(8,findINI.length-4).toLowerCase()
               return false
             } else return true
