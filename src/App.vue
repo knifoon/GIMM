@@ -24,7 +24,7 @@ let listRender = (f) =>{
   let other = unsorted.Other
   delete unsorted.Other
   modList = Object.keys(unsorted).sort().reduce((m,name) => ({ ...m, [name]: unsorted[name]}), {});
-  modList.Other = other
+  if(other) modList.Other = other
 }
 let activeMods = ref(null)
 let updateGimi = () => {
@@ -106,7 +106,10 @@ const reloader = () => {
   <div>
     <li v-for="(mods, charName) in modList" @click="changeContent(mods,charName)"
     :class="{active: charName == currentCharacter}">
-      {{ charName }} ({{ mods.length }})
+      {{ charName }} 
+      <span v-if="mods">
+        ({{ mods.length }})
+      </span>
     </li>
   </div>
 </div>

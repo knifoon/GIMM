@@ -147,8 +147,8 @@ const getMods = (f) => {
       // console.log(nn);
       finalList[nn.charAt(0).toUpperCase() + nn.slice(1)] = modList[n]
     })
-    // console.log('getMods')
-    // console.log(finalList)
+    console.log('getMods')
+    console.log(finalList)
     return finalList
   }
 export {getMods}
