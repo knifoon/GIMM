@@ -1,7 +1,11 @@
+import { nameSwapper } from './tools';
 const {readdirSync} = require('fs')
+const Store = require('electron-store');
+const settings = new Store();
 
 const getGimi = (f) => {
     let characterMods = {};
+    try {
     readdirSync(f,{withFileTypes: true}).forEach((mod)=>{
       if(mod.isDirectory()) {
         let modInfo = {
@@ -34,6 +38,10 @@ const getGimi = (f) => {
         })
       }
     });
+  } catch (err) {
+    console.log('GIMI folder missing, resetting folder')
+    if(settings.get('gimiFolder')) settings.delete('gimiFolder')
+  }
     // adjust list
     let charIgnore = ['CharacterShaders','undefined']
     const removeFromList = () =>{
@@ -62,23 +70,6 @@ const getGimi = (f) => {
     
     let finalList = {}
     Object.keys(characterMods).forEach(n => {
-      const nameSwapper = (nc) => {
-        let nameSwaps = {
-          "raidenshogun": "Raiden Shogun",
-          "lsmod": "LSMod",
-          "barbarasummertime": "Barbara - Summer Time"
-        }
-        let newName,ran = false
-        Object.keys(nameSwaps).forEach(swap => {
-          if(!ran){
-            if(nc == swap) {
-              newName = nameSwaps[swap]
-              ran = true
-            } else newName = nc
-          }
-        })
-        return newName
-      }
       let nn = nameSwapper(n)
       finalList[nn.charAt(0).toUpperCase() + nn.slice(1)] = characterMods[n]
     })

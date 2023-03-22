@@ -1,8 +1,11 @@
+import { nameSwapper } from './tools';
 const {readFileSync, readdirSync} = require('fs')
+const Store = require('electron-store');
+const settings = new Store();
 
 const getMods = (f) => {
     let modList = {};
-    let undefinedFolders = []
+    try {
     readdirSync(f,{withFileTypes: true}).forEach((mod)=>{
       if(mod.isDirectory()) {
         let modInfo = {
@@ -71,6 +74,10 @@ const getMods = (f) => {
         modList[modInfo.character].push(modInfoOut)
       }
     });
+  } catch (err) {
+    console.log('mod folder missing, resetting folder')
+    if(settings.get('modFolder')) settings.delete('modFolder')
+  }
     // ModList Filters 
     // "characters to ignore
     let charIgnore = ['charactershaders']
@@ -123,28 +130,7 @@ const getMods = (f) => {
     // capitalize / rename
     let finalList = {}
     Object.keys(modList).forEach(n => {
-      const nameSwapper = (nc) => {
-        let nameSwaps = {
-          "raidenshogun": "Raiden Shogun",
-          "lsmod": "LSMod",
-          "barbarasummertime": "Barbara - Summer Time"
-        }
-        let newName,ran = false
-        Object.keys(nameSwaps).forEach(swap => {
-          if(!ran){
-            if(nc == swap) {
-              newName = nameSwaps[swap]
-              ran = true
-            } else newName = nc
-          }
-        })
-        return newName
-      }
       let nn = nameSwapper(n)
-      // let nn
-      // nn = n == 'raidenshogun'? 'Raiden Shogun' : n
-      // nn = n == 'barbarasummertime' ? 'Barbara - Summer Time'
-      // console.log(nn);
       finalList[nn.charAt(0).toUpperCase() + nn.slice(1)] = modList[n]
     })
     console.log('getMods')
