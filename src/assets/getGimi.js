@@ -19,7 +19,7 @@ const getGimi = (f) => {
           modInfo.character = iniFile.substring(0,iniFile.length-4).toLowerCase()
         }
         //get character name from toggle mods
-        if(modInfo.character == "merged"){
+        if(modInfo.character.includes("merged") || modInfo.character.includes("swap")){
           readdirSync(modInfo.modFolderPath,{withFileTypes: true})
           .filter(dirent => dirent.isDirectory())
           .map(dirent => dirent.name)
@@ -73,8 +73,8 @@ const getGimi = (f) => {
       let nn = nameSwapper(n)
       finalList[nn.charAt(0).toUpperCase() + nn.slice(1)] = characterMods[n]
     })
-    // console.log('gimi mods');
-    // console.log(finalList);
+    console.log('gimi mods');
+    console.log(finalList);
     return finalList
   }
 export {getGimi}
