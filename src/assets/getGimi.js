@@ -54,8 +54,9 @@ const getGimi = (f) => {
         }
         if( n.toLowerCase().startsWith('disabled')) {
           let getName = n.substring(8,n.length).replace(/\s/g,'')
-          console.log(getName);
+          // console.log(n," -> ",getName);
           characterMods[getName] = characterMods[n]
+          delete characterMods[n]
         } 
         // sacrificial/royal swords
         if(n.toLowerCase() == 'sacrificialsword' || n.toLowerCase() == 'royallongsword'){

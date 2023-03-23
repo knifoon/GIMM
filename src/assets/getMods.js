@@ -117,13 +117,15 @@ const getMods = (f) => {
         if( n.toLowerCase().startsWith('disabled')) {
           // console.log(n);
           let getName = n.substring(8,n.length).replace(/\s/g,'')
-          // console.log(getName);
+          console.log(getName);
           if (modList[getName]) {
             modList[n].forEach(nm => {
               modList[getName].push(nm)
             })
-            delete modList[n]
+          } else {
+            modList[getName] = modList[n]
           }
+          delete modList[n]
         }
       })
     }
