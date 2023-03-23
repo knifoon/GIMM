@@ -77,6 +77,7 @@ const getMods = (f) => {
     });
   } catch (err) {
     console.log('mod folder missing, resetting folder')
+    // if(err == )
     if(settings.get('modFolder')) settings.delete('modFolder')
   }
     // ModList Filters 
@@ -116,7 +117,7 @@ const getMods = (f) => {
         // sort mods with disabled ini files
         if( n.toLowerCase().startsWith('disabled')) {
           // console.log(n);
-          let getName = n.substring(8,n.length).replace(/\s/g,'')
+          let getName = n.substring(8,n.length).replace(/\s|_/g,'')
           console.log(getName);
           if (modList[getName]) {
             modList[n].forEach(nm => {

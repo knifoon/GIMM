@@ -53,7 +53,7 @@ const getGimi = (f) => {
             delete characterMods[n]
         }
         if( n.toLowerCase().startsWith('disabled')) {
-          let getName = n.substring(8,n.length).replace(/\s/g,'')
+          let getName = n.substring(8,n.length).replace(/\s|_/g,'')
           // console.log(n," -> ",getName);
           characterMods[getName] = characterMods[n]
           delete characterMods[n]
