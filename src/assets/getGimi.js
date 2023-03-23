@@ -40,8 +40,10 @@ const getGimi = (f) => {
       }
     });
   } catch (err) {
-    console.log('GIMI folder missing, resetting folder')
-    if(settings.get('gimiFolder')) settings.delete('gimiFolder')
+    if(err.code === 'ENOENT'){
+      console.log('GIMI folder missing, resetting folder')
+      if(settings.get('gimiFolder')) settings.delete('gimiFolder')
+    }
   }
     // adjust list
     let charIgnore = ['CharacterShaders','undefined']

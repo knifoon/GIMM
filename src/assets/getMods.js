@@ -76,9 +76,10 @@ const getMods = (f) => {
       }
     });
   } catch (err) {
-    console.log('mod folder missing, resetting folder')
-    // if(err == )
-    if(settings.get('modFolder')) settings.delete('modFolder')
+    if(err.code === 'ENOENT'){
+      console.log('mod folder missing, resetting folder')
+      if(settings.get('modFolder')) settings.delete('modFolder')
+    }
   }
     // ModList Filters 
     // "characters to ignore
