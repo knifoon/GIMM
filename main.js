@@ -32,6 +32,9 @@ const template = [
   {
   label: app.name.toUpperCase(),
       submenu: [
+        { label: 'Settings',
+        click: () => { mainWindow.webContents.send('settings')}
+      },
         {role: 'reload'},
          {role: 'quit'},
          {role: 'toggleDevTools'}

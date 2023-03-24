@@ -2,7 +2,7 @@
 import {ref, getCurrentInstance} from 'vue'
 import Form from './Form.vue'
 const instance = getCurrentInstance();
-const {readFileSync, readdirSync, rmSync, cpSync, writeFileSync} = require('fs')
+const {readFileSync, readdirSync, writeFileSync} = require('fs')
 const props = defineProps(['json'])
 
 let modInfo = JSON.parse(props.json)

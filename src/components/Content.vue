@@ -98,23 +98,27 @@ let sortMods = (m) => {
     return 0;
   })
 }
-watch(() => props.mods, (newValue) => {
-  sortMods(newValue)
-  sortedMods.value.forEach(listItem =>{
-    if (listItem.collection) {
-      listItem.collection.forEach(variant => {
-        //checks if variant is active mod, if so shows it
-        if (compareMods(variant.path)) activeVariants.value[listItem.name] = variant.name
+// if(props.mods){
+  watch(() => props.mods, (newValue) => {
+    if(newValue){
+      sortMods(newValue)
+      sortedMods.value.forEach(listItem =>{
+        if (listItem.collection) {
+          listItem.collection.forEach(variant => {
+            //checks if variant is active mod, if so shows it
+            if (compareMods(variant.path)) activeVariants.value[listItem.name] = variant.name
+          })
+          //otherwise shows first mod in collection array
+          if (!activeVariants.value[listItem.name]) activeVariants.value[listItem.name] = listItem.collection[0].name
+          //update when removed from collection
+          if(!listItem.collection.find(n => n.name == activeVariants.value[listItem.name])){
+            activeVariants.value[listItem.name] = listItem.collection[0].name
+          }
+        }
       })
-      //otherwise shows first mod in collection array
-      if (!activeVariants.value[listItem.name]) activeVariants.value[listItem.name] = listItem.collection[0].name
-      //update when removed from collection
-      if(!listItem.collection.find(n => n.name == activeVariants.value[listItem.name])){
-        activeVariants.value[listItem.name] = listItem.collection[0].name
-      }
     }
-  })
- });
+   });
+// }
    
  let activeDrop = ref(null)
  let showVariants = (col) => {
@@ -131,7 +135,7 @@ watch(() => props.mods, (newValue) => {
 
 <template>
   <div class="content">
-    <div v-if="props.mods">
+    <div v-if="props.mods && props.characterName">
       <header>
         <div>
           <div>

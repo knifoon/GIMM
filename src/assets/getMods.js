@@ -50,16 +50,16 @@ const getMods = (f) => {
           })
         }
         // Add to list of mods
-        if(readdirSync(modInfo.modFolderPath).find(file => file.startsWith('GIMM.json'))){
-          let gimmFile = readdirSync(modInfo.modFolderPath).find(file => file.startsWith('GIMM.json'))
-          modInfo.gimm = readFileSync(`${modInfo.modFolderPath}/${gimmFile}`,'utf8')
-        }
-        // Use GIMM.jsonc
         let modInfoOut = {
           name : modInfo.folderName,
           character : modInfo.character,
           path : modInfo.modFolderPath,
           readme: modInfo.readme || null
+        }
+        // Use GIMM.jsonc
+        if(readdirSync(modInfo.modFolderPath).find(file => file.startsWith('GIMM.json'))){
+          let gimmFile = readdirSync(modInfo.modFolderPath).find(file => file.startsWith('GIMM.json'))
+          modInfo.gimm = readFileSync(`${modInfo.modFolderPath}/${gimmFile}`,'utf8')
         }
         if (modInfo.gimm) {
           const stripJSONComments = (data) => {
@@ -68,11 +68,11 @@ const getMods = (f) => {
           }
           modInfo.gimm = stripJSONComments(modInfo.gimm)
           let gimm = JSON.parse(modInfo.gimm)
-          // modInfoOut.character = gimm.character.toLowerCase();
+          modInfoOut.character = gimm.character.toLowerCase();
           modInfoOut.gimm = gimm
         }
         if(!modList[modInfoOut.character]) modList[modInfoOut.character] = []
-        modList[modInfo.character].push(modInfoOut)
+        modList[modInfoOut.character].push(modInfoOut)
       }
     });
   } catch (err) {
@@ -119,7 +119,7 @@ const getMods = (f) => {
         if( n.toLowerCase().startsWith('disabled')) {
           // console.log(n);
           let getName = n.substring(8,n.length).replace(/\s|_/g,'')
-          console.log(getName);
+          // console.log(getName);
           if (modList[getName]) {
             modList[n].forEach(nm => {
               modList[getName].push(nm)
@@ -138,8 +138,8 @@ const getMods = (f) => {
       let nn = nameSwapper(n)
       finalList[nn.charAt(0).toUpperCase() + nn.slice(1)] = modList[n]
     })
-    console.log('getMods')
-    console.log(finalList)
+    // console.log('getMods')
+    // console.log(finalList)
     return finalList
   }
 export {getMods}

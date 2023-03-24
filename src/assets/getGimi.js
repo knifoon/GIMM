@@ -1,5 +1,5 @@
 import { nameSwapper } from './tools';
-const {readdirSync} = require('fs')
+const {readdirSync, readFileSync} = require('fs')
 const Store = require('electron-store');
 const settings = new Store();
 
@@ -31,6 +31,17 @@ const getGimi = (f) => {
               return false
             } else return true
           })
+        }
+        if(readdirSync(modInfo.modFolderPath).find(file => file.startsWith('GIMM.json'))){
+          const stripJSONComments = (data) => {
+            var re = new RegExp("\/\/(.*)","g");
+            return data.replace(re,'');
+          }
+          let gimmFile = readdirSync(modInfo.modFolderPath).find(file => file.startsWith('GIMM.json'))
+          modInfo.gimm = readFileSync(`${modInfo.modFolderPath}/${gimmFile}`,'utf8')
+          modInfo.gimm = stripJSONComments(modInfo.gimm)
+          let gimm = JSON.parse(modInfo.gimm)
+          modInfo.character = gimm.character
         }
         if(!characterMods[modInfo.character]) characterMods[modInfo.character] = []
         characterMods[modInfo.character].push({
@@ -77,8 +88,8 @@ const getGimi = (f) => {
       let nn = nameSwapper(n)
       finalList[nn.charAt(0).toUpperCase() + nn.slice(1)] = characterMods[n]
     })
-    console.log('gimi mods');
-    console.log(finalList);
+    // console.log('gimi mods');
+    // console.log(finalList);
     return finalList
   }
 export {getGimi}

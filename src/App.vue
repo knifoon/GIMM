@@ -10,7 +10,6 @@ import Modal from './components/Modal.vue'
 log.info('Log from the renderer process');
 const {ipcRenderer} = require('electron')
 const Store = require('electron-store');
-
 const settings = new Store();
 
 
@@ -29,6 +28,8 @@ let listRender = (f) =>{
 let activeMods = ref(null)
 let updateGimi = () => {
   activeMods.value = getGimi(settings.get('gimiFolder'))
+  console.log('gimi updated');
+  console.log(activeMods.value)
 }
 if(settings.get('modFolder')) listRender(settings.get('modFolder'))
 if(settings.get('gimiFolder')) updateGimi()
@@ -49,11 +50,13 @@ ipcRenderer.on("handle-deep-link",link => {
 ipcRenderer.on("resetFolders",link => {
   resetFolders()
 })
-ipcRenderer.on('edit-mod', (e, modJson) => {
-  // console.log(modJson);
-  modalContent.value = {"editMod" : modJson}
+ipcRenderer.on('edit-mod', (e, data) => {
+  modalContent.value = {"editMod" : data}
   modal.value =  true;
-
+})
+ipcRenderer.on('settings', (e, data) => {
+  modalContent.value = {"settings" : true}
+  modal.value =  true;
 })
 
 const changeContent = (con,char) => {
@@ -78,7 +81,7 @@ let modalContent = ref(null)
 
 const reloader = () => {
   listRender(settings.get('modFolder'))
-  currentContent.value = modList[currentCharacter.value]
+  if(currentCharacter) currentContent.value = modList[currentCharacter.value]
   updateGimi();
 }
 

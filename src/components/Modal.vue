@@ -1,5 +1,6 @@
 <script setup>
 import EditMod from './modals/EditMod.vue'
+import Settings from './modals/Settings.vue';
 
 defineEmits(['closeModal','reloadList'])
 
@@ -19,11 +20,12 @@ const props = defineProps(['content'])
     <div class="wrap">
         <div class="content">
           <header>
-            <button @click="$emit('closeModal')">
+            <button @click="$emit('closeModal'),$emit('reloadList')">
             {{'<back'}}
             </button>
           </header>
           <div v-if="props.content">
+            <Settings :json="props.content.settings" v-if="props.content.settings"></Settings>
             <EditMod :json="props.content.editMod" v-if="props.content.editMod"></EditMod>
           </div>
           <slot v-else></slot>
@@ -44,6 +46,7 @@ const props = defineProps(['content'])
     height: 100%;
     width: 100%;
     z-index: 110;
+    overflow-y: scroll;
 }
 .content {
   margin: 8% auto 0;
