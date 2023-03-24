@@ -1,15 +1,15 @@
 <script setup>
 import Form from './Form.vue'
 import {ref} from 'vue'
-import { emit } from 'process';
 
 const props = defineProps(['json'])
 const Store = require('electron-store');
 const settings = new Store();
+const emit = defineEmits('notify')
 
 let defaultOverrides = {
       "raidenshogun": "Raiden Shogun",
-      "lsmod": "LSMod",
+      "lsmod": "Loading Screen",
       "barbarasummertime": "Barbara - Summer Time",
       "dilucflamme": "Diluc - Red Dead of Night",
       "fischlhighness": "Fischl - Highness",
@@ -18,7 +18,11 @@ let defaultOverrides = {
       "jeansea": "Jean - Sea Breeze"
     }
 if(!settings.get('overrides')) settings.set('overrides',defaultOverrides)
-let workingObj = ref(settings.get('overrides'))
+//sort for list
+let workingObj = ref({})
+Object.keys(settings.get('overrides')).sort().forEach(o => {
+workingObj.value[o] = settings.get('overrides')[o]
+})
 let newOverTar = ref('Target')
 let newOverVal = ref('Override')
 const removeOver = (o) => {
@@ -26,7 +30,7 @@ const removeOver = (o) => {
 }
 
 const addOver = (t,o) => {
-    workingObj.value[t] = o
+    workingObj.value = {[t]:o,...workingObj.value}
     newOverTar.value = "Target"
     newOverVal.value = "Override"
 }
@@ -34,7 +38,7 @@ const saveOver = () => {
 if(newOverTar.value != "Target") addOver(newOverTar.value,newOverVal.value)
 settings.set('overrides',workingObj.value)
 console.log(settings.get('overrides'))
-$emit('notify')
+emit('notify')
 }
 </script>
 <template class="settings">
@@ -46,7 +50,7 @@ $emit('notify')
         <div class="new-override">
             <input type="text" v-model="newOverTar"> :<input type="text" v-model="newOverVal">
         </div>
-        <button @click="addOver(newOverTar,newOverVal)"> + </button>
+        <button @click="addOver(newOverTar,newOverVal)"> New </button>
         <div v-for="title in Object.keys(workingObj)">
         <Form class="override" type="text" :label="title" v-model:data="workingObj[title]"/><button @click="removeOver(title)"> - </button>
     </div>
@@ -54,15 +58,15 @@ $emit('notify')
 </template>
 
 <style scoped>
-.overrides button {
-    width: 35px;
+.overrides button, header button {
+    width: 80px;
 }
 header {
     display: flex;
     align-items: flex-start;
 }
 h1 {
-    width: 495px;
+    width: 510px;
     display: inline-block;
 }
 .new-override {

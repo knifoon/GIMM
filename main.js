@@ -8,8 +8,6 @@ const log = require('electron-log')
 Store.initRenderer()
 
 log.initialize({ preload: true });
-
-log.info('Log from the main process')
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -22,7 +20,7 @@ const createWindow = () => {
       contextIsolation: false,
       preload: 'preload.js'
     },
-    resizable: false
+    resizable: true
   })
   // and load the index.html of the app.
   mainWindow.loadFile('dist/index.html')

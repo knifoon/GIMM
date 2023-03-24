@@ -4,7 +4,7 @@ const settings = new Store();
 const nameSwapper = (nc) => {
     let nameSwaps = {
       "raidenshogun": "Raiden Shogun",
-      "lsmod": "LSMod",
+      "lsmod": "Loading Screen",
       "barbarasummertime": "Barbara - Summer Time",
       "dilucflamme": "Diluc - Red Dead of Night",
       "fischlhighness": "Fischl - Highness",
