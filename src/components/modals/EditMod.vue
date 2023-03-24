@@ -25,6 +25,7 @@ const save = () => {
     let getOriginalName = modInfo.path.split('/')
     let originalName = getOriginalName[getOriginalName.length - 1]
     if(gimm.value.name == "") gimm.value.name = originalName
+    if(gimm.value.character == "") gimm.value.character = modInfo.character
     writeFileSync(`${modInfo.path}/GIMM.jsonc`, JSON.stringify(gimm.value))
     instance.parent.emit('reloadList',gimm.character)
     instance.parent.emit('closeModal')

@@ -1,6 +1,7 @@
 <script setup>
 import Form from './Form.vue'
 import {ref} from 'vue'
+import { emit } from 'process';
 
 const props = defineProps(['json'])
 const Store = require('electron-store');
@@ -33,6 +34,7 @@ const saveOver = () => {
 if(newOverTar.value != "Target") addOver(newOverTar.value,newOverVal.value)
 settings.set('overrides',workingObj.value)
 console.log(settings.get('overrides'))
+$emit('notify')
 }
 </script>
 <template class="settings">

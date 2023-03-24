@@ -1,10 +1,19 @@
 <script setup>
 import EditMod from './modals/EditMod.vue'
 import Settings from './modals/Settings.vue';
+import { ref } from 'vue';
 
-defineEmits(['closeModal','reloadList'])
+defineEmits(['closeModal','reloadList','notify'])
 
 const props = defineProps(['content'])
+let nContent = ref('Saved!')
+let nShow = ref(false)
+const notify = () => {
+nShow.value = true
+setTimeout(() => {
+  nShow.value = false
+}, 500);
+}
 </script>
 <template>
     <div class="modal">
@@ -23,9 +32,12 @@ const props = defineProps(['content'])
             <button @click="$emit('closeModal'),$emit('reloadList')">
             {{'<back'}}
             </button>
+            <Transition>
+              <div class="notification" v-if="nShow">{{ nContent }}</div>
+            </Transition>
           </header>
           <div v-if="props.content">
-            <Settings :json="props.content.settings" v-if="props.content.settings"></Settings>
+            <Settings :json="props.content.settings" v-if="props.content.settings" @notify="notify"></Settings>
             <EditMod :json="props.content.editMod" v-if="props.content.editMod"></EditMod>
           </div>
           <slot v-else></slot>
@@ -34,6 +46,15 @@ const props = defineProps(['content'])
     </div>
 </template>
 <style scoped>
+.notification {
+  position: absolute;
+  display: inline-block;
+  padding: 10px 100px;
+  background-color: rgb(127 255 212 / 65%);
+  font-weight: bold;
+  left: 150px;
+
+}
 .modal {
     position: absolute;
     height: 100vh;
