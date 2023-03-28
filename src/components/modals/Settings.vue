@@ -21,7 +21,7 @@ if(!settings.get('overrides')) settings.set('overrides',defaultOverrides)
 //sort for list
 let workingObj = ref({})
 Object.keys(settings.get('overrides')).sort().forEach(o => {
-workingObj.value[o] = settings.get('overrides')[o]
+workingObj.value[o.toLowerCase()] = settings.get('overrides')[o]
 })
 let newOverTar = ref('Target')
 let newOverVal = ref('Override')
