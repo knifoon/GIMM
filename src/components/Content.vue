@@ -147,8 +147,11 @@ let sortMods = (m) => {
             {{ props.characterName }}
           </div>
           <!-- sub titles for certain items -->
-        <sub v-if="props.characterName == overRep(`Royalsacrificialswords`)">
-        Royal Longsword & Sacrificial Sword share a model that can conflict with each other, you can only modify one at a time
+        <sub v-if="props.characterName == overRep(`Royalsacrificialswords`) ||
+                   props.characterName == overRep(`Royalsacrificialgreatswords`) ||
+                   props.characterName == overRep(`Royalsacrificialbows`)">
+                   
+        Royal & Sacrificial weapons share a model that can conflict with each other, you can only modify one at a time
         </sub>
         <sub v-if="props.characterName == overRep(`Incompatible`)">
         These are folders within your mod collection that dont use common folder structures and may need to be configured manually.

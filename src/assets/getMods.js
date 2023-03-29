@@ -107,13 +107,20 @@ const getMods = (f) => {
         }
         // combine royal longsword and Sacrifical sword
         // they share a hash that conflicts
-        if(n.toLowerCase() == 'sacrificialsword' || n.toLowerCase() == 'royallongsword'){
-          if(!modList['royalsacrificialswords']) modList['royalsacrificialswords'] = []
-          modList[n].forEach(nm => {
-            modList['royalsacrificialswords'].push(nm)
-          })
-          delete modList[n]
+        const roySacMerge = (w) => {
+          if(n.toLowerCase() == `sacrificial${w}` || n.toLowerCase() == `royallong${w}`){
+            if(!modList[`royalsacrificial${w}s`]) modList[`royalsacrificial${w}s`] = []
+            modList[n].forEach(nm => {
+              modList[`royalsacrificial${w}s`] = [nm]
+            })
+            delete modList[n]
+          }
         }
+        roySacMerge('sword')
+        roySacMerge('greatsword')
+        roySacMerge('bow')
+
+
         if(charIgnore.indexOf(n) >= 0 ) delete modList[n]
         // sort mods with disabled ini files
         if( n.toLowerCase().startsWith('disabled')) {
