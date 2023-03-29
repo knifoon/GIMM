@@ -30,7 +30,7 @@ const removeOver = (o) => {
 }
 
 const addOver = (t,o) => {
-    workingObj.value = {[t]:o,...workingObj.value}
+    workingObj.value = {[t.toLowerCase()]:o,...workingObj.value}
     newOverTar.value = "Target"
     newOverVal.value = "Override"
 }

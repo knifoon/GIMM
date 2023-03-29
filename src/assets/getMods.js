@@ -33,7 +33,7 @@ const getMods = (f) => {
           })
         }
         if (!modInfo.character) {
-          modInfo.character = "other"
+          modInfo.character = "incompatible"
         }
         //get character name from toggle mods
         if(modInfo.character.includes("merged") || modInfo.character.includes("swap")){
@@ -108,9 +108,9 @@ const getMods = (f) => {
         // combine royal longsword and Sacrifical sword
         // they share a hash that conflicts
         if(n.toLowerCase() == 'sacrificialsword' || n.toLowerCase() == 'royallongsword'){
-          if(!modList['Royal & Sacrificial Swords']) modList['Royal & Sacrificial Swords'] = []
+          if(!modList['royalsacrificialswords']) modList['royalsacrificialswords'] = []
           modList[n].forEach(nm => {
-            modList['Royal & Sacrificial Swords'].push(nm)
+            modList['royalsacrificialswords'].push(nm)
           })
           delete modList[n]
         }

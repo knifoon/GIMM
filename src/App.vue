@@ -20,10 +20,10 @@ let currentCharacter = ref(null)
 
 let listRender = (f) =>{
   let unsorted = getMods(f)
-  let other = unsorted.Other
-  delete unsorted.Other
+  let incompatible = unsorted.Incompatible
+  delete unsorted.Incompatible
   modList = Object.keys(unsorted).sort().reduce((m,name) => ({ ...m, [name]: unsorted[name]}), {});
-  if(other) modList.Other = other
+  if(incompatible) modList.Incompatible = incompatible
 }
 let activeMods = ref(null)
 let updateGimi = () => {
