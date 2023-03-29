@@ -77,10 +77,15 @@ const getGimi = (f) => {
         } 
         // sacrificial/royal swords
         const roySacMerge = (w) => {
-          if(n.toLowerCase() == `sacrificial${w}` || n.toLowerCase() == `royallong${w}`){
-            if(!characterMods[`royalsacrificial${w}s`]) characterMods[`royalsacrificial${w}s`] = []
+          let w2 = w == "fragments" ? "grimoire" 
+                 : w == "sword" ? "longsword"
+                 : w
+          let w3 = w2 == "longsword"? "sword" : w2
+
+          if(n.toLowerCase() == `sacrificial${w}` || n.toLowerCase() == `royal${w2}`){
+            if(!characterMods[`royalsacrificial${w3}s`]) characterMods[`royalsacrificial${w3}s`] = []
             characterMods[n].forEach(nm => {
-              characterMods[`royalsacrificial${w}s`] = [nm]
+              characterMods[`royalsacrificial${w3}s`] = [nm]
             })
             delete characterMods[n]
           }

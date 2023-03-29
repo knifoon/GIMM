@@ -108,10 +108,15 @@ const getMods = (f) => {
         // combine royal longsword and Sacrifical sword
         // they share a hash that conflicts
         const roySacMerge = (w) => {
-          if(n.toLowerCase() == `sacrificial${w}` || n.toLowerCase() == `royallong${w}`){
-            if(!modList[`royalsacrificial${w}s`]) modList[`royalsacrificial${w}s`] = []
+          let w2 = w == "fragments" ? "grimoire" 
+                 : w == "sword" ? "longsword"
+                 : w
+          let w3 = w2 == "longsword"? "sword" : w2
+
+          if(n.toLowerCase() == `sacrificial${w}` || n.toLowerCase() == `royal${w2}`){
+            if(!modList[`royalsacrificial${w3}s`]) modList[`royalsacrificial${w3}s`] = []
             modList[n].forEach(nm => {
-              modList[`royalsacrificial${w}s`] = [nm]
+              modList[`royalsacrificial${w3}s`] = [nm]
             })
             delete modList[n]
           }
