@@ -15,7 +15,8 @@ let defaultOverrides = {
       "fischlhighness": "Fischl - Highness",
       "keqingopulent": "Keqing - Opulent",
       "ningguangorchid": "Ningguang - Orchid",
-      "jeansea": "Jean - Sea Breeze"
+      "jeansea": "Jean - Sea Breeze",
+      "royalsacrificialswords": "Royal & Sacrificial Swords"
     }
 if(!settings.get('overrides')) settings.set('overrides',defaultOverrides)
 //sort for list

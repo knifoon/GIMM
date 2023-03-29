@@ -10,14 +10,15 @@ const nameSwapper = (nc) => {
       "fischlhighness": "Fischl - Highness",
       "keqingopulent": "Keqing - Opulent",
       "ningguangorchid": "Ningguang - Orchid",
-      "jeansea": "Jean - Sea Breeze"
+      "jeansea": "Jean - Sea Breeze",
+      "royalsacrificialswords": "Royal & Sacrificial Swords"
     }
     if(!settings.get('overrides')) settings.set('overrides',nameSwaps)
     else nameSwaps = settings.get('overrides')
     let nn,ran = false
     Object.keys(nameSwaps).forEach(swap => {
       if(!ran){
-        if(nc == swap.toLowerCase()) {
+        if(nc.toLowerCase() == swap.toLowerCase()) {
           nn = nameSwaps[swap]
           ran = true
         } else nn = nc
