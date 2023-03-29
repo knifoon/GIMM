@@ -17,8 +17,8 @@ const renderRM = (file) => marked.parse(readFileSync(file,'utf-8'));
 //right click
 window.addEventListener('contextmenu', (e) => {
   e.preventDefault()
-  if(e.target.className == 'mod-name') {
-    let modName = e.target.innerText;
+  if(e.target.closest('.mod-info')) {
+    let modName = e.target.closest('.mod-info').querySelector('.mod-name').innerText;
     let out;
     //check if variant
     if (sortedMods.value.find(m => m.name == modName)) {
