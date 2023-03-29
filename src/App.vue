@@ -18,12 +18,16 @@ let modList = {}
 let currentContent = ref(null)
 let currentCharacter = ref(null)
 
+const overRep = (n) => {
+  if(settings.get('overrides')[n.toLowerCase()]) return settings.get('overrides')[n.toLowerCase()]
+  return n
+}
 let listRender = (f) =>{
   let unsorted = getMods(f)
-  let incompatible = unsorted.Incompatible
-  delete unsorted.Incompatible
+  let incompatible = unsorted[overRep('Incompatible')]
+  delete unsorted[overRep('Incompatible')]
   modList = Object.keys(unsorted).sort().reduce((m,name) => ({ ...m, [name]: unsorted[name]}), {});
-  if(incompatible) modList.Incompatible = incompatible
+  if(incompatible) modList[overRep('Incompatible')] = incompatible
 }
 let activeMods = ref(null)
 let updateGimi = () => {

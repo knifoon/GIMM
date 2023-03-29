@@ -131,6 +131,11 @@ let sortMods = (m) => {
  let exists = (q) => {
   if(q) return true
  }
+
+ const overRep = (n) => {
+  if(settings.get('overrides')[n.toLowerCase()]) return settings.get('overrides')[n.toLowerCase()]
+  return n
+}
 </script>
 
 <template>
@@ -142,10 +147,10 @@ let sortMods = (m) => {
             {{ props.characterName }}
           </div>
           <!-- sub titles for certain items -->
-        <sub v-if="props.characterName == `Royalsacrificialswords`">
+        <sub v-if="props.characterName == overRep(`Royalsacrificialswords`)">
         Royal Longsword & Sacrificial Sword share a model that can conflict with each other, you can only modify one at a time
         </sub>
-        <sub v-if="props.characterName == `Incompatible`">
+        <sub v-if="props.characterName == overRep(`Incompatible`)">
         These are folders within your mod collection that dont use common folder structures and may need to be configured manually.
         </sub>
         </div>
@@ -175,8 +180,8 @@ let sortMods = (m) => {
       <div class="mod-info" v-else>
         <span class="mod-name">{{ item.name }}</span>
         <button v-if="item.readme" @click="rmToggle(item.name)" class="rm-toggle"><img src="/images/info.svg" title="readme"></button>
-        <button class="toggle" v-if="!compareMods(item.path) && props.characterName != `Incompatible`" @click="swapMods(item.path)">Enable</button>
-        <span v-else-if="props.characterName == `Incompatible`" class="other">Not Supported</span>
+        <button class="toggle" v-if="!compareMods(item.path) && props.characterName != overRep(`Incompatible`)" @click="swapMods(item.path)">Enable</button>
+        <span v-else-if="props.characterName == overRep(`Incompatible`)" class="other">Not Supported</span>
         <span v-else class="active-mod">Active</span>
       </div>
       <div class="readme" v-if="activeRM == item.name" v-html="renderRM(item.readme)"></div>
