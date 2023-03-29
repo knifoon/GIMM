@@ -17,6 +17,10 @@ const getGimi = (f) => {
         let iniFile = readdirSync(modInfo.path).find(file => file.endsWith('.ini')) || null;
         if(iniFile) {
           modInfo.character = iniFile.substring(0,iniFile.length-4).toLowerCase()
+        } else {
+          console.log('invalid folder');
+          console.log(modInfo);
+          modInfo.character = "undefined";
         }
         //get character name from toggle mods
         if(modInfo.character.includes("merged") || modInfo.character.includes("swap")){
