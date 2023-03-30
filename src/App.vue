@@ -41,12 +41,18 @@ if(settings.get('gimiFolder')) updateGimi()
 ipcRenderer.on('modFolder',(e,f) =>{
   settings.set('modFolder', f)
   listRender(f)
-  if(settings.get('gimiFolder')) showSetup.value = false
+  if(settings.get('gimiFolder')) {
+    if(settings.get('modFolder') == settings.get('gimiFolder')) settings.delete('modFolder')
+    else showSetup.value = false
+  } 
 })
 ipcRenderer.on('gimiFolder',(e,f) =>{
   settings.set('gimiFolder', f)
   activeMods.value = getGimi(f)
-  if(settings.get('modFolder')) showSetup.value = false
+  if(settings.get('modFolder')) {
+    if(settings.get('modFolder') == settings.get('gimiFolder')) settings.delete('gimiFolder')
+    else showSetup.value = false
+  }
 })
 ipcRenderer.on("handle-deep-link",link => {
   GBLink.value = true;
