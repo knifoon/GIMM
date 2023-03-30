@@ -1,5 +1,6 @@
 <script setup>
 const {ipcRenderer} = require('electron')
+const props = defineProps(['dupe'])
 </script>
 
 <template>
@@ -9,6 +10,7 @@ const {ipcRenderer} = require('electron')
     <img src="/images/welkbg.png" alt="" >
   </div>
   <div class="setup-content">
+    <h1 v-if="dupe">Mod Collection & GIMI Mod Folders must be different</h1>
     <strong>Mod Collection</strong>: a folder with all your mods, unzipped.
     <br>
     <strong>GIMI Mods</strong>: GIMI/3dmigoto's Mods folder.
@@ -20,6 +22,12 @@ const {ipcRenderer} = require('electron')
 </template>
 
 <style scoped>
+h1{
+  background: -webkit-linear-gradient(white, #38495a);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 .setup {
   width: 80%;
   margin: auto;

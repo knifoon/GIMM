@@ -42,7 +42,10 @@ ipcRenderer.on('modFolder',(e,f) =>{
   settings.set('modFolder', f)
   listRender(f)
   if(settings.get('gimiFolder')) {
-    if(settings.get('modFolder') == settings.get('gimiFolder')) settings.delete('modFolder')
+    if(settings.get('modFolder') == settings.get('gimiFolder')) {
+      settings.delete('modFolder')
+      dupe.value = true
+    }
     else showSetup.value = false
   } 
 })
@@ -50,7 +53,10 @@ ipcRenderer.on('gimiFolder',(e,f) =>{
   settings.set('gimiFolder', f)
   activeMods.value = getGimi(f)
   if(settings.get('modFolder')) {
-    if(settings.get('modFolder') == settings.get('gimiFolder')) settings.delete('gimiFolder')
+    if(settings.get('modFolder') == settings.get('gimiFolder')){
+       settings.delete('gimiFolder')
+       dupe.value = true
+      }
     else showSetup.value = false
   }
 })
@@ -94,7 +100,7 @@ const reloader = () => {
   if(currentCharacter) currentContent.value = modList[currentCharacter.value]
   updateGimi();
 }
-
+let dupe = ref(false)
 </script>
 
 <template>
@@ -113,7 +119,7 @@ const reloader = () => {
   <h2>Information</h2>
 </div>
 <div class="list-head" v-show="!showSetup"><h2>Mod List</h2></div>
-  <Setup v-if="showSetup"/>
+  <Setup v-if="showSetup" :dupe="dupe"/>
 <Content v-if="!showSetup" :key="reloader" :mods="currentContent" :characterName="currentCharacter" :activeMods="activeMods" v-on:updateGimi="updateGimi"></Content>
 <div v-if="!showSetup" class="character-list">
   <div>

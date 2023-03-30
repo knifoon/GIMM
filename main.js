@@ -1,6 +1,6 @@
 // main.js
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, ipcMain, dialog, shell,Menu , MenuItem, webContents } = require('electron')
+const { app, BrowserWindow, ipcMain, dialog, shell,Menu , MenuItem, webContents, nativeTheme } = require('electron')
 const path = require('path')
 const Store = require('electron-store')
 const log = require('electron-log')
@@ -8,6 +8,7 @@ const log = require('electron-log')
 Store.initRenderer()
 
 log.initialize({ preload: true });
+nativeTheme.themeSource = 'dark';
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
