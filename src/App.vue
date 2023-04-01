@@ -133,7 +133,7 @@ let dupe = ref(false)
   </div>
 </div>
 <footer v-show="!showSetup">
-  work in progress --  by <a href="http://twitter.com/knifoon">Knifoon</a>
+  0.2.0 --  by <a href="http://twitter.com/knifoon">Knifoon</a>
   </footer>
 </template>
 
