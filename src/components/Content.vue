@@ -52,14 +52,39 @@ let compareMods = (p) => {
     if(cur == active) return true
   } else return false
 }
+let enabledMods = (p) => {
+  if(props.activeMods[props.characterName]){
+    let gimiMods = props.activeMods[props.characterName]
+    let comp = p.split('/')
+    let cur =  comp[comp.length -1]
+    let modMatch = false
+    gimiMods.forEach(mod => {
+      let modFol = mod.path.split('/')
+      if(cur == modFol[modFol.length -1]){
+        modMatch = true
+      }
+    })
+    return modMatch
+  } else return false
+
+}
 let rmMod = () => {
   rmSync(props.activeMods[props.characterName][0].path,{recursive: true})
   emit('updateGimi')
 }
-let swapMods = (p) => {
+let disableMod = (p) => {
   let comp = p.split('/')
   let cur =  comp[comp.length -1]
-  if (props.activeMods[props.characterName]){
+  if(readdirSync(`${settings.get('gimiFolder')}/${cur}`)){
+    console.log(readdirSync(`${settings.get('gimiFolder')}/${cur}`));
+    rmSync(`${settings.get('gimiFolder')}/${cur}`,{recursive: true})
+  }
+  emit('updateGimi')
+}
+let swapMods = (p,swap = true) => {
+  let comp = p.split('/')
+  let cur =  comp[comp.length -1]
+  if (swap && props.activeMods[props.characterName]){
     rmSync(props.activeMods[props.characterName][0].path,{recursive: true})
   }
   cpSync(p,`${settings.get('gimiFolder')}/${cur}`,{recursive: true})
@@ -140,6 +165,7 @@ let sortMods = (m) => {
 
 <template>
   <div class="content">
+    <!-- Modified Pages -->
     <div v-if="props.mods && props.characterName">
       <header>
         <div>
@@ -158,7 +184,7 @@ let sortMods = (m) => {
         </sub>
         </div>
         <!-- end subs -->
-        <button class="disable" v-if="props.activeMods[props.characterName]" @click="rmMod">Disable</button>
+        <button class="disable" v-if="props.activeMods[props.characterName] && props.characterName != overRep(`Lips`)" @click="rmMod">Disable</button>
       </header>
     <li class="mod-li" v-for="item in sortedMods" :class="{collection: item.collection}">
       <div class="mod-collection" v-if="item.collection">
@@ -183,7 +209,10 @@ let sortMods = (m) => {
       <div class="mod-info" v-else>
         <span class="mod-name">{{ item.name }}</span>
         <button v-if="item.readme" @click="rmToggle(item.name)" class="rm-toggle"><img src="/images/info.svg" title="readme"></button>
-        <button class="toggle" v-if="!compareMods(item.path) && props.characterName != overRep(`Incompatible`)" @click="swapMods(item.path)">Enable</button>
+        <!-- multimods -->
+        <button class="toggle" v-if="!enabledMods(item.path) && props.characterName == overRep(`Lips`)" @click="swapMods(item.path,false)">Enable</button>
+        <button class="disable" v-else-if="enabledMods(item.path) && props.characterName == overRep(`Lips`)" @click="disableMod(item.path)">Disable</button>
+        <button class="toggle" v-else-if="!compareMods(item.path) && props.characterName != overRep(`Incompatible`)" @click="swapMods(item.path)">Enable</button>
         <span v-else-if="props.characterName == overRep(`Incompatible`)" class="other">Not Supported</span>
         <span v-else class="active-mod">Active</span>
       </div>
