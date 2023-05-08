@@ -207,6 +207,7 @@ let sortMods = (m) => {
         </div>
       </div>
       <div class="mod-info" v-else>
+        <span v-if="settings.get('general')['Show Preview Thumbnail']"><img src="/images/welk.png" alt="" style="height: 20px;"></span>
         <span class="mod-name">{{ item.name }}</span>
         <button v-if="item.readme" @click="rmToggle(item.name)" class="rm-toggle"><img src="/images/info.svg" title="readme"></button>
         <!-- multimods -->

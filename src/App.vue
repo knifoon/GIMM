@@ -1,5 +1,5 @@
 <script setup>
-import {ref} from 'vue'
+import { ref } from 'vue'
 import Content from './components/Content.vue'
 import Setup from './components/Setup.vue'
 import { getMods } from "@/assets/getMods.js"
@@ -7,8 +7,8 @@ import { getGimi } from "@/assets/getGimi.js"
 import log from 'electron-log/renderer';
 import Modal from './components/Modal.vue'
 
-log.info('Log from the renderer process');
-const {ipcRenderer} = require('electron')
+const { version } = require('../package.json');
+const { ipcRenderer } = require('electron')
 const Store = require('electron-store');
 const settings = new Store();
 
@@ -133,7 +133,7 @@ let dupe = ref(false)
   </div>
 </div>
 <footer v-show="!showSetup">
-  0.2.0 --  by <a href="http://twitter.com/knifoon">Knifoon</a>
+  {{ version }} --  by <a href="http://twitter.com/knifoon">Knifoon</a>
   </footer>
 </template>
 

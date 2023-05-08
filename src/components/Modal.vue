@@ -27,14 +27,14 @@ setTimeout(() => {
     <img src="/images/welkbg.png" alt="" >
     </div>
     <div class="wrap">
+        <Transition>
+          <div class="notification" v-if="nShow">{{ nContent }}</div>
+        </Transition>
+        <button @click="$emit('closeModal'),$emit('reloadList')" class="close-btn">
+            {{'X'}}
+        </button>
         <div class="content">
           <header>
-            <button @click="$emit('closeModal'),$emit('reloadList')">
-            {{'<back'}}
-            </button>
-            <Transition>
-              <div class="notification" v-if="nShow">{{ nContent }}</div>
-            </Transition>
           </header>
           <div v-if="props.content">
             <Settings :json="props.content.settings" v-if="props.content.settings" @notify="notify"></Settings>
@@ -52,8 +52,14 @@ setTimeout(() => {
   padding: 10px 100px;
   background-color: rgb(127 255 212 / 65%);
   font-weight: bold;
-  left: 150px;
+  left: 50%;
+  transform: translateX(-50%);
 
+}
+.close-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
 }
 .modal {
     position: absolute;
@@ -66,10 +72,14 @@ setTimeout(() => {
 .wrap{
     height: 100%;
     width: 100%;
+    text-align: center;
     z-index: 110;
     overflow-y: scroll;
 }
+
 .content {
+  display: inline-block;
+  text-align: left;
   margin: 8% auto 0;
   width: 80%;
 }
