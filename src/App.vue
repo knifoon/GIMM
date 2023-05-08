@@ -126,7 +126,7 @@ let dupe = ref(false)
     <li v-for="(mods, charName) in modList" @click="changeContent(mods,charName)"
     :class="{active: charName == currentCharacter}">
       {{ charName }} 
-      <span v-if="mods">
+      <span v-if="mods && settings.get('general')['Show Mod Count']">
         ({{ mods.length }})
       </span>
     </li>

@@ -8,7 +8,7 @@ const settings = new Store();
 const emit = defineEmits('notify');
 const tabs = ['general','overrides'];
 
-let activeSettings = ref('overrides');
+let activeSettings = ref('general');
 let checkActive = (t) => {
     if(t == activeSettings.value) return true
 }
