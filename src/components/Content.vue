@@ -348,8 +348,11 @@ border-bottom: solid 1px var(--color-border);
 .thumbnail {
   height: 50px;
   margin-right: 10px;
+  overflow: hidden;
+  border-radius: 3px;
 }
 .thumbnail img {
+
   height: 50px;
   width: 50px;
   object-fit: cover;

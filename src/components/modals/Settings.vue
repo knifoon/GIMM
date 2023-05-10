@@ -26,7 +26,8 @@ let defaultOverrides = {
     }
 let defaultGeneral = {
       "Show Author": true,
-      "Show Mod Count": true
+      "Show Mod Count": true,
+      "Show Preview Thumbnail": true
 }
 if(!settings.get('overrides')) settings.set('overrides',defaultOverrides)
 if(!settings.get('general')) settings.set('general',defaultGeneral)

@@ -18,6 +18,12 @@ let modList = {}
 let currentContent = ref(null)
 let currentCharacter = ref(null)
 
+let defaultGeneral = {
+      "Show Author": true,
+      "Show Mod Count": true,
+      "Show Preview Thumbnail": true
+}
+if(!settings.get('general')) settings.set('general',defaultGeneral)
 const overRep = (n) => {
   if(settings.get('overrides')[n.toLowerCase()]) return settings.get('overrides')[n.toLowerCase()]
   return n
