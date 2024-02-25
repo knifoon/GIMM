@@ -6,7 +6,7 @@ import { OnClickOutside } from '@vueuse/components'
 const emit = defineEmits(['updateGimi'])
 const props = defineProps(['mods','characterName','activeMods'])
 const {ipcRenderer} = require('electron')
-const {readFileSync, readdirSync, rmSync, cpSync} = require('fs')
+const {readFileSync, readdirSync, rmSync, cpSync, existsSync} = require('fs')
 
 const Store = require('electron-store');
 
@@ -52,14 +52,39 @@ let compareMods = (p) => {
     if(cur == active) return true
   } else return false
 }
+let enabledMods = (p) => {
+  if(props.activeMods[props.characterName]){
+    let gimiMods = props.activeMods[props.characterName]
+    let comp = p.split('/')
+    let cur =  comp[comp.length -1]
+    let modMatch = false
+    gimiMods.forEach(mod => {
+      let modFol = mod.path.split('/')
+      if(cur == modFol[modFol.length -1]){
+        modMatch = true
+      }
+    })
+    return modMatch
+  } else return false
+
+}
 let rmMod = () => {
   rmSync(props.activeMods[props.characterName][0].path,{recursive: true})
   emit('updateGimi')
 }
-let swapMods = (p) => {
+let disableMod = (p) => {
   let comp = p.split('/')
   let cur =  comp[comp.length -1]
-  if (props.activeMods[props.characterName]){
+  if(readdirSync(`${settings.get('gimiFolder')}/${cur}`)){
+    console.log(readdirSync(`${settings.get('gimiFolder')}/${cur}`));
+    rmSync(`${settings.get('gimiFolder')}/${cur}`,{recursive: true})
+  }
+  emit('updateGimi')
+}
+let swapMods = (p,swap = true) => {
+  let comp = p.split('/')
+  let cur =  comp[comp.length -1]
+  if (swap && props.activeMods[props.characterName]){
     rmSync(props.activeMods[props.characterName][0].path,{recursive: true})
   }
   cpSync(p,`${settings.get('gimiFolder')}/${cur}`,{recursive: true})
@@ -136,10 +161,14 @@ let sortMods = (m) => {
   if(settings.get('overrides')[n.toLowerCase()]) return settings.get('overrides')[n.toLowerCase()]
   return n
 }
+ const thumbnailPath = (path) =>{
+  return `${path}/preview.png`
+ }
 </script>
 
 <template>
   <div class="content">
+    <!-- Modified Pages -->
     <div v-if="props.mods && props.characterName">
       <header>
         <div>
@@ -158,7 +187,7 @@ let sortMods = (m) => {
         </sub>
         </div>
         <!-- end subs -->
-        <button class="disable" v-if="props.activeMods[props.characterName]" @click="rmMod">Disable</button>
+        <button class="disable" v-if="props.activeMods[props.characterName] && props.characterName != overRep(`Lips`)" @click="rmMod">Disable</button>
       </header>
     <li class="mod-li" v-for="item in sortedMods" :class="{collection: item.collection}">
       <div class="mod-collection" v-if="item.collection">
@@ -172,7 +201,12 @@ let sortMods = (m) => {
         </OnClickOutside>
         <div v-for="variant in item.collection">
           <div v-if="activeVariants[item.name] == variant.name" class="mod-info">
+                <!-- Thumbnail -->
+            <div class="thumbnail" v-if="settings.get('general')['Show Preview Thumbnail'] && existsSync(thumbnailPath(variant.path))">
+              <img :src=thumbnailPath(variant.path)>
+            </div>
             <span class="mod-name">{{ variant.name }}</span>
+            <span v-if="variant.author && settings.get('general')['Show Author']"> by {{ variant.author }}</span>
             <button v-if="variant.readme" @click="item.readme = variant.readme ,rmToggle(item.name)" class="rm-toggle"><img src="/images/info.svg" title="readme"></button>
             <button class="toggle" v-if="!compareMods(variant.path)" @click="swapMods(variant.path)">Enable</button>
             <span v-else class="active-mod">Active</span>
@@ -181,9 +215,17 @@ let sortMods = (m) => {
         </div>
       </div>
       <div class="mod-info" v-else>
+        <!-- Thumbnail -->
+        <div class="thumbnail" v-if="settings.get('general')['Show Preview Thumbnail'] && existsSync(thumbnailPath(item.path))">
+          <img :src=thumbnailPath(item.path)>
+        </div>
         <span class="mod-name">{{ item.name }}</span>
+        <span v-if="item.author && settings.get('general')['Show Author']"> by {{ item.author }}</span>
         <button v-if="item.readme" @click="rmToggle(item.name)" class="rm-toggle"><img src="/images/info.svg" title="readme"></button>
-        <button class="toggle" v-if="!compareMods(item.path) && props.characterName != overRep(`Incompatible`)" @click="swapMods(item.path)">Enable</button>
+        <!-- multimods -->
+        <button class="toggle" v-if="!enabledMods(item.path) && props.characterName == overRep(`Lips`)" @click="swapMods(item.path,false)">Enable</button>
+        <button class="disable" v-else-if="enabledMods(item.path) && props.characterName == overRep(`Lips`)" @click="disableMod(item.path)">Disable</button>
+        <button class="toggle" v-else-if="!compareMods(item.path) && props.characterName != overRep(`Incompatible`)" @click="swapMods(item.path)">Enable</button>
         <span v-else-if="props.characterName == overRep(`Incompatible`)" class="other">Not Supported</span>
         <span v-else class="active-mod">Active</span>
       </div>
@@ -301,7 +343,20 @@ border-bottom: solid 1px var(--color-border);
 }
 .mod-info {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+}
+.thumbnail {
+  height: 50px;
+  margin-right: 10px;
+  overflow: hidden;
+  border-radius: 3px;
+}
+.thumbnail img {
+
+  height: 50px;
+  width: 50px;
+  object-fit: cover;
+
 }
 .mod-name {
   flex-grow: 1;
@@ -326,7 +381,7 @@ border-bottom: solid 1px var(--color-border);
   background: url('/images/chevron-right.svg') no-repeat;
   background-position: center;
   border: none;
-  height: 50px;
+  height: calc(100% - 40px);
   width:  40px;
   cursor: pointer;
   opacity: 65%;

@@ -1,5 +1,5 @@
 <script setup>
-import {ref} from 'vue'
+import { ref } from 'vue'
 import Content from './components/Content.vue'
 import Setup from './components/Setup.vue'
 import { getMods } from "@/assets/getMods.js"
@@ -7,8 +7,8 @@ import { getGimi } from "@/assets/getGimi.js"
 import log from 'electron-log/renderer';
 import Modal from './components/Modal.vue'
 
-log.info('Log from the renderer process');
-const {ipcRenderer} = require('electron')
+const { version } = require('../package.json');
+const { ipcRenderer } = require('electron')
 const Store = require('electron-store');
 const settings = new Store();
 
@@ -18,6 +18,12 @@ let modList = {}
 let currentContent = ref(null)
 let currentCharacter = ref(null)
 
+let defaultGeneral = {
+      "Show Author": true,
+      "Show Mod Count": true,
+      "Show Preview Thumbnail": true
+}
+if(!settings.get('general')) settings.set('general',defaultGeneral)
 const overRep = (n) => {
   if(settings.get('overrides')[n.toLowerCase()]) return settings.get('overrides')[n.toLowerCase()]
   return n
@@ -126,14 +132,14 @@ let dupe = ref(false)
     <li v-for="(mods, charName) in modList" @click="changeContent(mods,charName)"
     :class="{active: charName == currentCharacter}">
       {{ charName }} 
-      <span v-if="mods">
+      <span v-if="mods && settings.get('general')['Show Mod Count']">
         ({{ mods.length }})
       </span>
     </li>
   </div>
 </div>
 <footer v-show="!showSetup">
-  0.2.0 --  by <a href="http://twitter.com/knifoon">Knifoon</a>
+  {{ version }} --  by <a href="http://twitter.com/knifoon">Knifoon</a>
   </footer>
 </template>
 
